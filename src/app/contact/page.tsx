@@ -15,11 +15,11 @@ export default function ContactPage() {
 
     const [status, setStatus] = useState('');
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Validation
@@ -222,10 +222,6 @@ export default function ContactPage() {
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1753.3609605254364!2d72.83998041894479!3d19.1846756445262!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b6fac445ad6d%3A0x1a8758a4568eac14!2sMoreshwar%20Dham%20CHS%2C%20Liberty%20Garden%20Cross%20Rd%20Number%203%2C%20Malad%2C%20Navy%20Colony%2C%20Somwari%20Bazar%2C%20Malad%20West%2C%20Mumbai%2C%20Maharashtra%20400064!5e1!3m2!1sen!2sin!4v1754671159121!5m2!1sen!2sin"
                         width="100%"
                         height="100%"
-                        style={{ minHeight: '300px', border: 0 }}
-                        allowFullScreen=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
                         title="Company Location"
                     ></iframe>
                 </div>

@@ -13,7 +13,7 @@ export default function Categories() {
     { name: 'Paper Bags2', img: '/products/paper_bag.jpg', id: 'paperbags2' },
   ];
 
-  const handleClick = (id) => {
+  const handleClick = (id:string) => {
     router.push(`/products#${id}`);
   };
 
