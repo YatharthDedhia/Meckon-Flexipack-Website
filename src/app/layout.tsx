@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-
+import { Analytics } from "@vercel/analytics/next"
 import { Open_Sans } from 'next/font/google';
 
 const openSans = Open_Sans({
@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <main className="md:p-10">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
