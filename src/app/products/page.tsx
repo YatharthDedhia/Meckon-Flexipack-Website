@@ -5,16 +5,16 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 const categories = [
-  {
-    name: 'Paper Bags',
-    id: 'paperbags',
-    products: [
-      { name: 'Brown Kraft Paper Bag', img: '/products/paper_bag.jpg' },
-      { name: 'White Paper Bag with Handle', img: '/products/paper_bag.jpg' },
-      { name: 'Recycled Paper Bag', img: '/products/paper_bag.jpg' },
-      { name: 'Custom Printed Paper Bag', img: '/products/paper_bag.jpg' },
-    ],
-  },
+  // {
+  //   name: 'Paper Bags',
+  //   id: 'paperbags',
+  //   products: [
+  //     { name: 'Brown Kraft Paper Bag', img: '/products/paper_bag.jpg' },
+  //     { name: 'White Paper Bag with Handle', img: '/products/paper_bag.jpg' },
+  //     { name: 'Recycled Paper Bag', img: '/products/paper_bag.jpg' },
+  //     { name: 'Custom Printed Paper Bag', img: '/products/paper_bag.jpg' },
+  //   ],
+  // },
   {
     name: 'Plastic Bags',
     id: 'plasticbags',
@@ -35,15 +35,15 @@ const categories = [
       { name: 'Retort Pouch', img: '/products/flexible_packaging.png' },
     ],
   },
-  {
-    name: 'Paper Packaging',
-    id: 'paperpackaging',
-    products: [
-      { name: 'Corrugated Box', img: '/products/paper_packaging.jpg' },
-      { name: 'Folding Carton', img: '/products/paper_packaging.jpg' },
-      { name: 'Paper Sleeve', img: '/products/paper_packaging.jpg' },
-    ],
-  },
+  // {
+  //   name: 'Paper Packaging',
+  //   id: 'paperpackaging',
+  //   products: [
+  //     { name: 'Corrugated Box', img: '/products/paper_packaging.jpg' },
+  //     { name: 'Folding Carton', img: '/products/paper_packaging.jpg' },
+  //     { name: 'Paper Sleeve', img: '/products/paper_packaging.jpg' },
+  //   ],
+  // },
 ];
 
 export default function ProductsPage() {

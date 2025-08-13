@@ -1,16 +1,11 @@
 'use client';
 
+import { contacts } from '@/data';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { pageContent } from '@/data';
 
 export default function AboutPage() {
-    const team = [
-        { name: 'Yomesh Dedhia', email: 'yomesh@gmail.com' },
-        { name: 'Rashesh Dedhia', email: 'raddedhia@gmail.com' },
-        { name: 'Dharmesh Dedhia', email: 'dharmesh@gmail.com' },
-        { name: 'Krishi Dedhia', email: 'krishi@gmail.com' }
-    ];
-
     const router = useRouter();
 
     return (
@@ -27,51 +22,37 @@ export default function AboutPage() {
                         priority
                     />
                 </div>
-                <div className="md:pl-12 max-w-3xl text-center md:text-left">
-                    <h2 className="text-4xl font-bold text-white bg-[var(--brand-red)] p-3 mb-6">
-                        About The Company
+                <div className="md:pl-12 max-w-5xl md:text-left">
+                    <h2 className="text-4xl font-bold text-white bg-[var(--brand-red)] p-3 items-center justify-center mb-6 md:text-left">
+                        {pageContent.about.heading}{' '}
                     </h2>
-                    <p className="text-gray-700 text-lg leading-relaxed">
-                        Meckon Flexipack has been a leader in the packaging industry for over 35 years,
-                        delivering innovative and sustainable packaging solutions worldwide. Specializing in
-                        both paper and plastic packaging products such as carry bags, flexible packaging films,
-                        and custom printed solutions, we are committed to helping brands enhance their customer
-                        experience while reducing environmental impact.
-                    </p>
-                    <p className="text-gray-700 text-lg leading-relaxed mt-4">
-                        Our team leverages cutting-edge technology and a deep understanding of materials to
-                        create packaging that not only looks exceptional but also offers durability and
-                        functionality tailored to meet diverse market needs. Sustainability remains at the core
-                        of our mission, as we strive to provide eco-friendly alternatives that support a
-                        circular economy.
-                    </p>
+                    {pageContent.about.paragraphs.map((paragraph, index) => (
+                        <p key={index} className="text-gray-700 max-w-4xl mx-auto md:mx-0 text-lg leading-relaxed mb-4">
+                            {paragraph}
+                        </p>
+                    ))}
                 </div>
             </section>
 
             {/* History */}
-            <section className="bg-white max-w-7xl mx-auto px-4 py-16 md:py-24 border-t border-gray-200">
-                <h2 className="text-4xl font-bold text-white bg-[var(--brand-red)] p-3 items-center justify-center mb-6 text-center md:text-left">
-                    Our History
+            <section className="bg-white max-w-7xl mx-auto px-4 py-15 md:py-15 border-t border-gray-200">
+                <h2 className="text-4xl font-bold text-white bg-[var(--brand-red)] p-3 items-center justify-center mb-6 md:text-left">
+                    {pageContent.history.heading}{' '}
                 </h2>
-                <p className="text-gray-700 max-w-4xl mx-auto md:mx-0 text-lg leading-relaxed">
-                    Founded in the 1980s, Meckon Flexipack started as a small packaging manufacturer and has evolved
-                    into a trusted global provider. Through decades of growth, we have continuously adapted to the
-                    changing market needs while maintaining the highest standards of quality and innovation.
-                </p>
-                <p className="text-gray-700 max-w-4xl mx-auto md:mx-0 text-lg leading-relaxed mt-4">
-                    From humble beginnings focused on simple plastic bags, we expanded into the paper packaging sector,
-                    responding to the growing demand for sustainable packaging options. Our journey reflects our
-                    commitment to innovation, customer satisfaction, and environmental stewardship.
-                </p>
+                {pageContent.history.paragraphs.map((paragraph, index) => (
+                    <p key={index} className="text-gray-700 max-w-4xl mx-auto md:mx-0 text-lg leading-relaxed mb-4">
+                        {paragraph}
+                    </p>
+                ))}
             </section>
 
             {/* Team */}
             <section className="max-w-7xl mx-auto px-4 md:py-24 border-t border-gray-200">
-                <h2 className="text-4xl font-bold text-white bg-[var(--brand-red)] p-3 text-center md:text-left">
+                <h2 className="text-4xl font-bold text-white bg-[var(--brand-red)] p-3 md:text-left">
                     Meet Our Team
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 py-5 md:grid-cols-4 gap-12 max-w-6xl mx-auto">
-                    {team.map(({ name, email }) => {
+                    {contacts.team.map(({ name, email, phone }) => {
                         const firstName = name.split(' ')[0].toLowerCase();
 
                         return (
@@ -89,14 +70,15 @@ export default function AboutPage() {
                             >
                                 <Image
                                     src={`/team/${firstName}.jpeg`}
-                                    alt={`${name} - ${email}`}
+                                    alt={`${name}`}
                                     width={120}
                                     height={120}
                                     className="mx-auto mb-4 rounded-full object-contain"
                                     loading="lazy"
                                 />
                                 <h3 className="text-xl font-semibold">{name}</h3>
-                                <p>{email}</p>
+                                <p className="text-sm">{email}</p>
+                                <p className="text-sm">{phone}</p>
                             </div>
                         );
                     })}
