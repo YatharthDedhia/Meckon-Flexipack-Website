@@ -53,78 +53,25 @@ export default function ContactPage() {
     return (
         <div className="max-w-7xl mx-auto px-4 py-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-                {/* Team Contacts */}
-                <div className="flex flex-col gap-10">
-                    <div className="border border-gray-200 rounded-lg shadow-md space-y-8">
-                        <h2 className="h-15 flex items-center justify-center text-3xl font-semibold text-white bg-[var(--brand-red)] w-full">
-                            Contact Details
-                        </h2>
-                        {contacts.team.map(({ name, phone }) => {
-                            const firstName = name.split(' ')[0].toLowerCase();
-                            return (
-                                <div key={name} className="flex m-15 items-center gap-4">
-                                    <Image
-                                        src={`/team/${firstName}.jpeg`}
-                                        alt={name}
-                                        width={70}
-                                        height={70}
-                                        className="rounded-full object-cover flex-shrink-0"
-                                        loading="lazy"
-                                    />
-                                    <div>
-                                        <h3 className="text-xl font-semibold text-[var(--brand-red)]">{name}</h3>
-                                        <p className="flex items-center gap-2 text-gray-700">
-                                            <FaPhone className="text-[var(--brand-red)]" />
-                                            <a href={`tel:${phone}`} className="hover:underline">{phone}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Company Details */}
-                    <div className="border border-gray-200 rounded-lg p-6 shadow-md bg-white">
-                        <h3 className="text-2xl font-semibold text-[var(--brand-red)] mb-6 text-center">
-                            Company Details
-                        </h3>
-                        <div className="flex flex-col gap-6">
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-red)] text-white flex-shrink-0">
-                                    <FaMapMarkerAlt size={22} />
-                                </div>
-                                <p className="text-gray-700 text-lg leading-relaxed">{contacts.company.address}</p>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-red)] text-white flex-shrink-0">
-                                    <FaIdCard size={22} />
-                                </div>
-                                <p className="text-gray-700 text-lg leading-relaxed">{contacts.company.gstin}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 {/* Enquiry Form */}
                 <div className="bg-[var(--brand-red)] rounded-lg p-8 shadow-md">
                     <h2 className="text-3xl font-semibold text-white mb-6 text-center">Send us an Enquiry</h2>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         <label className="flex flex-col">
                             <span className="text-white font-semibold mb-1">Name <span className="text-yellow-300">*</span></span>
-                            <input type="text" name="name" value={formData.name} onChange={handleChange} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"/>
+                            <input type="text" name="name" value={formData.name} onChange={handleChange} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
                         </label>
                         <label className="flex flex-col">
                             <span className="text-white font-semibold mb-1">Phone Number <span className="text-yellow-300">*</span></span>
-                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"/>
+                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
                         </label>
                         <label className="flex flex-col">
                             <span className="text-white font-semibold mb-1">Email</span>
-                            <input type="email" name="email" value={formData.email} onChange={handleChange} className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"/>
+                            <input type="email" name="email" value={formData.email} onChange={handleChange} className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
                         </label>
                         <label className="flex flex-col">
                             <span className="text-white font-semibold mb-1">Company</span>
-                            <input type="text" name="company" value={formData.company} onChange={handleChange} className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"/>
+                            <input type="text" name="company" value={formData.company} onChange={handleChange} className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
                         </label>
                         <label className="flex flex-col">
                             <span className="text-white font-semibold mb-1">Enquiry <span className="text-yellow-300">*</span></span>
@@ -137,6 +84,67 @@ export default function ContactPage() {
                     </form>
                 </div>
 
+                {/* Team Contacts */}
+                <div className="flex flex-col gap-10">
+                    <div className="border border-gray-200 rounded-lg shadow-md space-y-8">
+                        <h2 className="h-15 flex items-center justify-center text-3xl font-semibold text-white bg-[var(--brand-red)] w-full">
+                            Contact Details
+                        </h2>
+                        {contacts.team.map(({ name, phone }) => {
+                            const firstName = name.split(' ')[0].toLowerCase();
+                            return (
+                                <div key={name} className="flex m-5 items-center gap-4">
+                                    <Image
+                                        src={`/team/${firstName}.jpeg`}
+                                        alt={name}
+                                        width={70}
+                                        height={70}
+                                        className="rounded-full object-cover flex-shrink-0"
+                                        loading="lazy"
+                                    />
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-[var(--brand-red)]">{name}</h3>
+                                        <p className="flex items-center gap-2 text-gray-700">
+                                            <FaPhone className="text-[var(--brand-red)]" />
+                                            <a href={`tel:${phone}`} className="underline hover:text-[var(--brand-red)]">{phone}</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Company Details */}
+                    <div className="border border-gray-200 rounded-lg shadow-md space-y-8">
+                        <h3 className="h-15 flex items-center justify-center text-3xl font-semibold text-white bg-[var(--brand-red)] w-full">
+                            Company Details
+                        </h3>
+                        <div className="flex flex-col gap-6 p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-red)] text-white flex-shrink-0">
+                                    <FaMapMarkerAlt size={22} />
+                                </div>
+                                <p className="text-gray-700 text-lg leading-relaxed">
+                                    <a
+                                        href={`https://maps.app.goo.gl/4cFg6ZwCo3zQYXcc9`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="underline hover:text-[var(--brand-red)]"
+                                    >
+                                        {contacts.company.address}
+                                    </a>
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-red)] text-white flex-shrink-0">
+                                    <FaIdCard size={22} />
+                                </div>
+                                <p className="text-gray-700 text-lg leading-relaxed">{contacts.company.gstin}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     );

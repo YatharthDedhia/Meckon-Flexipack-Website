@@ -71,14 +71,14 @@ export default function AboutPage() {
                                 <Image
                                     src={`/team/${firstName}.jpeg`}
                                     alt={`${name}`}
-                                    width={120}
-                                    height={120}
+                                    width={200}
+                                    height={200}
                                     className="mx-auto mb-4 rounded-full object-contain"
                                     loading="lazy"
                                 />
                                 <h3 className="text-xl font-semibold">{name}</h3>
-                                <p className="text-sm">{email}</p>
-                                <p className="text-sm">{phone}</p>
+                                {/* <p className="text-sm">{email}</p> */}
+                                {/* <p className="text-sm">{phone}</p> */}
                             </div>
                         );
                     })}
