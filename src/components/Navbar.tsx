@@ -41,8 +41,8 @@ export default function Navbar() {
             loading="lazy"
           />
           <span className="text-[var(--brand-red)] leading-relaxed tracking-wider">
-            <span className="block text-2xl font-semibold">Meckon</span>
-            <span className="block text-2xl font-semibold">Flexipack</span>
+            <span className="block text-2xl font-bold">Meckon</span>
+            <span className="block text-2xl font-bold">Flexipack</span>
           </span>
         </Link>
 

@@ -1,53 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-
-const categories = [
-  // {
-  //   name: 'Paper Bags',
-  //   id: 'paperbags',
-  //   products: [
-  //     { name: 'Brown Kraft Paper Bag', img: '/products/paper_bag.jpg' },
-  //     { name: 'White Paper Bag with Handle', img: '/products/paper_bag.jpg' },
-  //     { name: 'Recycled Paper Bag', img: '/products/paper_bag.jpg' },
-  //     { name: 'Custom Printed Paper Bag', img: '/products/paper_bag.jpg' },
-  //   ],
-  // },
-  {
-    name: 'Plastic Bags',
-    id: 'plasticbags',
-    products: [
-      { name: 'Clear Plastic Bag', img: '/products/plastic_bag.jpg' },
-      { name: 'Zip Lock Plastic Bag', img: '/products/plastic_bag.jpg' },
-      { name: 'Biodegradable Plastic Bag', img: '/products/plastic_bag.jpg' },
-    ],
-  },
-  {
-    name: 'Flexible Packaging',
-    id: 'flexiblepackaging',
-    products: [
-      { name: 'Stand-up Pouch', img: '/products/flexible_packaging.png' },
-      { name: 'Resealable Bag', img: '/products/flexible_packaging.png' },
-      { name: 'Vacuum Sealed Bag', img: '/products/flexible_packaging.png' },
-      { name: 'Printed Flexible Film', img: '/products/flexible_packaging.png' },
-      { name: 'Retort Pouch', img: '/products/flexible_packaging.png' },
-    ],
-  },
-  // {
-  //   name: 'Paper Packaging',
-  //   id: 'paperpackaging',
-  //   products: [
-  //     { name: 'Corrugated Box', img: '/products/paper_packaging.jpg' },
-  //     { name: 'Folding Carton', img: '/products/paper_packaging.jpg' },
-  //     { name: 'Paper Sleeve', img: '/products/paper_packaging.jpg' },
-  //   ],
-  // },
-];
+import { productsData } from '@/data';
 
 export default function ProductsPage() {
   const router = useRouter();
+  const categories = productsData.categories;
 
   // Scroll to hash section on mount
   useEffect(() => {
@@ -79,7 +39,7 @@ export default function ProductsPage() {
                 className="cursor-pointer group"
                 onClick={handleClick}
               >
-                <div className="aspect-square relative overflow-hidden rounded-lg shadow-md">
+                <div className="relative overflow-hidden rounded-lg shadow-md h-80">
                   <Image
                     src={img}
                     alt={productName}
