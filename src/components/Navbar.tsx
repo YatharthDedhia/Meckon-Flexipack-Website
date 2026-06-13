@@ -1,12 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const toggleMenu = () => {
     if (open) {
@@ -29,52 +39,102 @@ export default function Navbar() {
     { label: 'Contact Us', path: '/contact' },
   ];
 
+  const isActive = (path: string) =>
+    path === '/' ? pathname === '/' : pathname.startsWith(path);
 
   return (
-    <nav className="bg-white shadow z-50 text-xl">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-8 relative">
-        <Link href="/" className="flex items-center space-x-4">
+    <nav
+      className={`sticky top-0 z-50 bg-white/80 backdrop-blur-md transition-all duration-300 ${
+        scrolled ? 'shadow-md border-b border-gray-100' : 'border-b border-transparent'
+      }`}
+    >
+      <div
+        className={`max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6 relative transition-all duration-300 ${
+          scrolled ? 'py-3' : 'py-5'
+        }`}
+      >
+        {/* Brand lockup */}
+        <Link href="/" className="flex items-center gap-3 group">
           <img
             src="/logo.png"
             alt="Meckon Flexipack Logo"
-            className="w-15 h-15 object-contain"
-            loading="lazy"
+            className={`object-contain transition-all duration-300 ${scrolled ? 'w-11 h-11' : 'w-14 h-14'}`}
           />
-          <span className="text-[var(--brand-red)] leading-relaxed tracking-wider">
-            <span className="block text-2xl font-bold">Meckon</span>
-            <span className="block text-2xl font-bold">Flexipack</span>
+          <span className="leading-none">
+            <span className="font-heading block text-xl md:text-2xl font-extrabold tracking-tight text-[var(--brand-red)]">
+              Meckon
+            </span>
+            <span className="block text-[0.7rem] md:text-xs font-semibold uppercase tracking-[0.35em] text-[var(--brand-ink)]">
+              Flexipack
+            </span>
           </span>
         </Link>
 
+        {/* Animated hamburger */}
         <button
           onClick={toggleMenu}
-          className="md:hidden text-[var(--brand-red)] focus:outline-none z-30 text-3xl select-none"
-          aria-label="Toggle Menu"
-          style={{ position: 'relative', lineHeight: 1 }}
+          className="md:hidden relative flex h-11 w-11 items-center justify-center rounded-full text-[var(--brand-red)] transition-colors hover:bg-[var(--surface-tint)] focus:outline-none z-30"
+          aria-label="Toggle menu"
+          aria-expanded={open}
         >
-          {open ? '✕' : '☰'}
+          <span className="relative block h-4 w-6">
+            <span
+              className={`absolute left-0 block h-0.5 w-6 rounded-full bg-current transition-all duration-300 ${
+                open ? 'top-1.5 rotate-45' : 'top-0'
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-1.5 block h-0.5 w-6 rounded-full bg-current transition-all duration-300 ${
+                open ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <span
+              className={`absolute left-0 block h-0.5 w-6 rounded-full bg-current transition-all duration-300 ${
+                open ? 'top-1.5 -rotate-45' : 'top-3'
+              }`}
+            />
+          </span>
         </button>
 
         {/* Desktop menu */}
-        <ul className="hidden md:flex gap-6 font-medium tracking-wide h-16 items-center">
-          {navItems.map((item) => (
-            <li key={item.label} className="h-full">
-              <Link
-                href={item.path}
-                className="flex items-center h-full px-2 rounded transition-colors duration-100
-                   hover:bg-[var(--brand-red)] hover:text-white"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
+        <ul className="hidden md:flex gap-1 text-base font-medium items-center">
+          {navItems.map((item) => {
+            const active = isActive(item.path);
+            return (
+              <li key={item.label}>
+                <Link
+                  href={item.path}
+                  className={`relative flex items-center px-4 py-2 rounded-full transition-colors duration-200 ${
+                    active
+                      ? 'text-[var(--brand-red)]'
+                      : 'text-gray-600 hover:text-[var(--brand-red)] hover:bg-[var(--surface-tint)]'
+                  }`}
+                >
+                  {item.label}
+                  <span
+                    className={`absolute left-4 right-4 -bottom-0.5 h-0.5 rounded-full bg-[var(--brand-red)] transition-transform duration-200 origin-left ${
+                      active ? 'scale-x-100' : 'scale-x-0'
+                    }`}
+                  />
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <Link
+              href="/contact"
+              className="ml-2 inline-flex items-center rounded-full bg-[var(--brand-red)] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            >
+              Enquire Now
+            </Link>
+          </li>
         </ul>
       </div>
 
       {/* Mobile menu */}
       {showMenu && (
         <div
-          className={`w-full bg-white shadow-md md:hidden z-10 border-t border-gray-200 ${open && !animatingOut
+          className={`w-full bg-white md:hidden z-10 border-t border-gray-100 shadow-lg ${open && !animatingOut
             ? 'animate-slideDownFadeIn'
             : animatingOut
               ? 'animate-slideUpFadeOut'
@@ -82,22 +142,26 @@ export default function Navbar() {
             }`}
           style={{ overflow: 'hidden' }}
         >
-          <ul className="flex flex-col items-center justify-center tracking-wide text-lg border-l border-r border-gray-200">
-            {navItems.map((item) => (
-              <li
-                key={item.label}
-                className="h-full w-full border-b border-gray-200 last:border-b-0"
-              >
-                <Link
-                  href={item.path}
-                  className="flex justify-center items-center w-full h-full p-3 rounded transition-colors duration-100
-                   hover:bg-[var(--brand-red)] hover:text-white"
-                  onClick={() => toggleMenu()}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+          <ul className="flex flex-col px-3 py-2">
+            {navItems.map((item) => {
+              const active = isActive(item.path);
+              return (
+                <li key={item.label}>
+                  <Link
+                    href={item.path}
+                    className={`flex items-center justify-between rounded-xl px-4 py-3 my-0.5 text-lg font-medium transition-colors duration-150 ${
+                      active
+                        ? 'bg-[var(--brand-red)] text-white'
+                        : 'text-gray-700 hover:bg-[var(--surface-tint)] hover:text-[var(--brand-red)]'
+                    }`}
+                    onClick={() => toggleMenu()}
+                  >
+                    {item.label}
+                    <span className={`text-sm ${active ? 'text-white' : 'text-[var(--brand-red)]'}`}>→</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

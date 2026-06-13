@@ -3,12 +3,20 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Analytics } from "@vercel/analytics/next"
-import { Open_Sans } from 'next/font/google';
+import { Manrope, Inter } from 'next/font/google';
 
-const openSans = Open_Sans({
+const manrope = Manrope({
   subsets: ['latin'],
-  weight: ['400', '600', '700'], // include weights you want
-  variable: '--font-open-sans',
+  weight: ['600', '700', '800'],
+  variable: '--font-heading',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -18,10 +26,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={openSans.variable}>
+    <html lang="en" className={`${manrope.variable} ${inter.variable}`}>
       <body className="font-sans" >
         <Navbar />
-        <main className="md:p-10">{children}</main>
+        <main>{children}</main>
         <Footer />
         <Analytics />
       </body>

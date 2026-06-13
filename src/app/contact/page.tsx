@@ -2,8 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, FaPaperPlane } from 'react-icons/fa';
 import { contacts } from '@/data';
+import SectionHeading from '@/components/SectionHeading';
+import Reveal from '@/components/Reveal';
+
+const inputClasses =
+    'rounded-lg bg-white px-4 py-3 text-gray-900 placeholder-gray-400 outline-none ring-2 ring-transparent transition focus:ring-white';
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -15,6 +20,7 @@ export default function ContactPage() {
     });
 
     const [status, setStatus] = useState('');
+    const [sending, setSending] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,6 +34,7 @@ export default function ContactPage() {
             return;
         }
 
+        setSending(true);
         setStatus('Sending...');
 
         try {
@@ -47,103 +54,145 @@ export default function ContactPage() {
         } catch (err) {
             console.error(err);
             setStatus('Error sending enquiry. Please try again later.');
+        } finally {
+            setSending(false);
         }
     };
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <Reveal className="mb-4">
+                <SectionHeading kicker="Get In Touch" title="Contact Us" />
+            </Reveal>
+            <Reveal delay={80} className="mb-14">
+                <p className="mx-auto max-w-2xl text-center text-lg leading-relaxed text-gray-500">
+                    Have a packaging requirement or a custom enquiry? Send us a message and our team
+                    will get back to you shortly.
+                </p>
+            </Reveal>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
                 {/* Enquiry Form */}
-                <div className="bg-[var(--brand-red)] rounded-lg p-8 shadow-md">
-                    <h2 className="text-3xl font-semibold text-white mb-6 text-center">Send us an Enquiry</h2>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                        <label className="flex flex-col">
-                            <span className="text-white font-semibold mb-1">Name <span className="text-yellow-300">*</span></span>
-                            <input type="text" name="name" value={formData.name} onChange={handleChange} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
-                        </label>
-                        <label className="flex flex-col">
-                            <span className="text-white font-semibold mb-1">Phone Number <span className="text-yellow-300">*</span></span>
-                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
-                        </label>
-                        <label className="flex flex-col">
-                            <span className="text-white font-semibold mb-1">Email</span>
-                            <input type="email" name="email" value={formData.email} onChange={handleChange} className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
-                        </label>
-                        <label className="flex flex-col">
-                            <span className="text-white font-semibold mb-1">Company</span>
-                            <input type="text" name="company" value={formData.company} onChange={handleChange} className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
-                        </label>
-                        <label className="flex flex-col">
-                            <span className="text-white font-semibold mb-1">Enquiry <span className="text-yellow-300">*</span></span>
-                            <textarea name="message" value={formData.message} onChange={handleChange} rows={5} required className="bg-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"></textarea>
-                        </label>
-                        <button type="submit" className="bg-yellow-300 text-black py-3 rounded font-semibold hover:bg-yellow-400 transition-colors">
-                            Send Enquiry
-                        </button>
-                        {status && <p className="text-white text-center mt-2">{status}</p>}
-                    </form>
-                </div>
-
-                {/* Team Contacts */}
-                <div className="flex flex-col gap-10">
-                    <div className="border border-gray-200 rounded-lg shadow-md space-y-8">
-                        <h2 className="h-15 flex items-center justify-center text-3xl font-semibold text-white bg-[var(--brand-red)] w-full">
-                            Contact Details
-                        </h2>
-                        {contacts.team.map(({ name, phone }) => {
-                            const firstName = name.split(' ')[0].toLowerCase();
-                            return (
-                                <div key={name} className="flex m-5 items-center gap-4">
-                                    <Image
-                                        src={`/team/${firstName}.jpeg`}
-                                        alt={name}
-                                        width={70}
-                                        height={70}
-                                        className="rounded-full object-cover flex-shrink-0"
-                                        loading="lazy"
-                                    />
-                                    <div>
-                                        <h3 className="text-xl font-semibold text-[var(--brand-red)]">{name}</h3>
-                                        <p className="flex items-center gap-2 text-gray-700">
-                                            <FaPhone className="text-[var(--brand-red)]" />
-                                            <a href={`tel:${phone}`} className="underline hover:text-[var(--brand-red)]">{phone}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Company Details */}
-                    <div className="border border-gray-200 rounded-lg shadow-md space-y-8">
-                        <h3 className="h-15 flex items-center justify-center text-3xl font-semibold text-white bg-[var(--brand-red)] w-full">
-                            Company Details
-                        </h3>
-                        <div className="flex flex-col gap-6 p-6">
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-red)] text-white flex-shrink-0">
-                                    <FaMapMarkerAlt size={22} />
-                                </div>
-                                <p className="text-gray-700 text-lg leading-relaxed">
-                                    <a
-                                        href={`https://maps.app.goo.gl/4cFg6ZwCo3zQYXcc9`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="underline hover:text-[var(--brand-red)]"
-                                    >
-                                        {contacts.company.address}
-                                    </a>
-                                </p>
+                <Reveal>
+                    <div className="bg-[var(--brand-red)] rounded-2xl p-8 md:p-10 shadow-xl">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">Send us an Enquiry</h2>
+                        <p className="text-white/70 mb-8 text-sm">Fields marked <span className="text-white">*</span> are required.</p>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <label className="flex flex-col">
+                                    <span className="text-white font-semibold mb-2 text-sm">Name <span className="text-white/80">*</span></span>
+                                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className={inputClasses} />
+                                </label>
+                                <label className="flex flex-col">
+                                    <span className="text-white font-semibold mb-2 text-sm">Phone Number <span className="text-white/80">*</span></span>
+                                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+91 ..." required className={inputClasses} />
+                                </label>
+                                <label className="flex flex-col">
+                                    <span className="text-white font-semibold mb-2 text-sm">Email</span>
+                                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@company.com" className={inputClasses} />
+                                </label>
+                                <label className="flex flex-col">
+                                    <span className="text-white font-semibold mb-2 text-sm">Company</span>
+                                    <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company name" className={inputClasses} />
+                                </label>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-red)] text-white flex-shrink-0">
-                                    <FaIdCard size={22} />
-                                </div>
-                                <p className="text-gray-700 text-lg leading-relaxed">{contacts.company.gstin}</p>
+                            <label className="flex flex-col">
+                                <span className="text-white font-semibold mb-2 text-sm">Enquiry <span className="text-white/80">*</span></span>
+                                <textarea name="message" value={formData.message} onChange={handleChange} rows={5} placeholder="Tell us what you need — product, quantity, specifications..." required className={inputClasses}></textarea>
+                            </label>
+                            <button
+                                type="submit"
+                                disabled={sending}
+                                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3 font-semibold text-[var(--brand-red)] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:hover:translate-y-0"
+                            >
+                                <FaPaperPlane size={15} />
+                                {sending ? 'Sending...' : 'Send Enquiry'}
+                            </button>
+                            {status && (
+                                <p className="rounded-lg bg-white/15 px-4 py-2 text-center text-sm text-white">{status}</p>
+                            )}
+                        </form>
+                    </div>
+                </Reveal>
+
+                {/* Right column: Team + Company */}
+                <div className="flex flex-col gap-8">
+                    {/* Team Contacts */}
+                    <Reveal delay={100}>
+                        <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-md">
+                            <SectionHeading kicker="Talk To Us" title="Contact Details" align="left" className="mb-8" />
+                            <div className="flex flex-col gap-6">
+                                {contacts.team.map(({ name, phone, email }) => {
+                                    const firstName = name.split(' ')[0].toLowerCase();
+                                    return (
+                                        <div key={name} className="flex items-center gap-4">
+                                            <Image
+                                                src={`/team/${firstName}.jpeg`}
+                                                alt={name}
+                                                width={64}
+                                                height={64}
+                                                className="h-16 w-16 rounded-full object-cover ring-2 ring-[var(--surface-tint)] flex-shrink-0"
+                                                loading="lazy"
+                                            />
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-[var(--brand-ink)]">{name}</h3>
+                                                <a href={`tel:${phone}`} className="flex items-center gap-2 text-gray-600 hover:text-[var(--brand-red)] transition-colors">
+                                                    <FaPhone className="text-[var(--brand-red)] text-sm" />
+                                                    {phone}
+                                                </a>
+                                                {email && (
+                                                    <a href={`mailto:${email}`} className="flex items-center gap-2 text-gray-600 hover:text-[var(--brand-red)] transition-colors break-all">
+                                                        <FaEnvelope className="text-[var(--brand-red)] text-sm" />
+                                                        {email}
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
 
+                    {/* Company Details */}
+                    <Reveal delay={180}>
+                        <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-md">
+                            <SectionHeading kicker="Visit / Reach Us" title="Company Details" align="left" className="mb-8" />
+                            <div className="flex flex-col gap-5">
+                                <a
+                                    href="https://maps.app.goo.gl/4cFg6ZwCo3zQYXcc9"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group flex items-start gap-4"
+                                >
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--surface-tint)] text-[var(--brand-red)] flex-shrink-0 transition-colors group-hover:bg-[var(--brand-red)] group-hover:text-white">
+                                        <FaMapMarkerAlt size={18} />
+                                    </div>
+                                    <p className="text-gray-600 leading-relaxed group-hover:text-[var(--brand-red)] transition-colors">
+                                        {contacts.company.address}
+                                    </p>
+                                </a>
+                                <a href={`tel:${contacts.company.phone}`} className="group flex items-center gap-4">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--surface-tint)] text-[var(--brand-red)] flex-shrink-0 transition-colors group-hover:bg-[var(--brand-red)] group-hover:text-white">
+                                        <FaPhone size={18} />
+                                    </div>
+                                    <p className="text-gray-600 group-hover:text-[var(--brand-red)] transition-colors">{contacts.company.phone}</p>
+                                </a>
+                                <a href={`mailto:${contacts.company.email}`} className="group flex items-center gap-4">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--surface-tint)] text-[var(--brand-red)] flex-shrink-0 transition-colors group-hover:bg-[var(--brand-red)] group-hover:text-white">
+                                        <FaEnvelope size={18} />
+                                    </div>
+                                    <p className="text-gray-600 break-all group-hover:text-[var(--brand-red)] transition-colors">{contacts.company.email}</p>
+                                </a>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--surface-tint)] text-[var(--brand-red)] flex-shrink-0">
+                                        <FaIdCard size={18} />
+                                    </div>
+                                    <p className="text-gray-600">{contacts.company.gstin}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </Reveal>
                 </div>
             </div>
         </div>

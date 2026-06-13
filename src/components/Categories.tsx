@@ -1,7 +1,41 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { FaArrowRight } from 'react-icons/fa';
 import { productsData } from '../data';
+import SectionHeading from './SectionHeading';
+import Reveal from './Reveal';
+
+type Category = (typeof productsData.categories)[number];
+
+function CategoryCard({
+  category,
+  onClick,
+}: {
+  category: Category;
+  onClick: () => void;
+}) {
+  return (
+    <div onClick={onClick} className="group cursor-pointer mx-auto w-full max-w-md">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
+        <img
+          src={category.overview.img}
+          alt={category.overview.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        <span className="absolute top-4 right-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[var(--brand-red)] backdrop-blur-sm">
+          {category.products.length} products
+        </span>
+        <h3 className="absolute bottom-0 left-0 right-0 flex items-center justify-between gap-2 px-5 py-4 text-xl font-semibold text-white">
+          <span>{category.overview.name}</span>
+          <FaArrowRight className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
+        </h3>
+      </div>
+    </div>
+  );
+}
 
 export default function Categories() {
   const router = useRouter();
@@ -13,57 +47,27 @@ export default function Categories() {
   const categories = productsData.categories;
 
   return (
-    <section className="bg-white animate-fadeIn mt-10 pb-10">
-      <h2 className="bg-[var(--brand-red)] text-white h-20 text-3xl font-bold text-center mb-12 flex items-center justify-center">
-        Categories we cover
-      </h2>
+    <section className="bg-[var(--surface)] py-20">
+      <Reveal>
+        <SectionHeading kicker="What We Make" title="Categories we cover" />
+      </Reveal>
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 mt-14">
         {/* Top row: first 3 categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 mb-12">
-          {categories.slice(0, 3).map((category) => (
-            <div
-              key={category.id}
-              onClick={() => handleClick(category.id)}
-              className="group cursor-pointer mx-auto max-w-md overflow-hidden transition-shadow duration-300"
-            >
-              <div className="aspect-[4/3] relative overflow-hidden rounded-lg">
-                <img
-                  src={category.overview.img}
-                  alt={category.overview.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="mt-4 text-2xl font-semibold text-gray-900 text-center
-                             group-hover:bg-[var(--brand-red)] group-hover:text-white transition-colors duration-100 px-2 py-3 rounded">
-                {category.overview.name}
-              </h3>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+          {categories.slice(0, 3).map((category, idx) => (
+            <Reveal key={category.id} delay={idx * 100}>
+              <CategoryCard category={category} onClick={() => handleClick(category.id)} />
+            </Reveal>
           ))}
         </div>
 
         {/* Bottom row: next 2 categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-4xl mx-auto">
-          {categories.slice(3, 5).map((category) => (
-            <div
-              key={category.id}
-              onClick={() => handleClick(category.id)}
-              className="group cursor-pointer mx-auto max-w-md overflow-hidden transition-shadow duration-300"
-            >
-              <div className="aspect-[4/3] relative overflow-hidden rounded-lg">
-                <img
-                  src={category.overview.img}
-                  alt={category.overview.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="mt-4 text-2xl font-semibold text-gray-900 text-center
-                             group-hover:bg-[var(--brand-red)] group-hover:text-white transition-colors duration-100 px-2 py-3 rounded">
-                {category.overview.name}
-              </h3>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {categories.slice(3, 5).map((category, idx) => (
+            <Reveal key={category.id} delay={idx * 100}>
+              <CategoryCard category={category} onClick={() => handleClick(category.id)} />
+            </Reveal>
           ))}
         </div>
       </div>
