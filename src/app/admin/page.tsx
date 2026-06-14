@@ -26,10 +26,10 @@ export default async function AdminDashboard() {
  <img src={bg(content, 'admin')} alt="" aria-hidden className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.15] grayscale" />
  <header className="relative border-b-2 border-[var(--foreground)] bg-white/80 backdrop-blur-sm">
  <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
- <div>
- <p className="font-display text-xl text-[var(--foreground)]">Meckon Flexipack</p>
+ <a href="/" className="group">
+ <p className="font-display text-xl text-[var(--foreground)] transition-colors group-hover:text-[var(--accent)]">Meckon Flexipack</p>
  <p className="kicker mt-1">Admin Dashboard</p>
- </div>
+ </a>
  <div className="flex items-center gap-4">
  <span className="text-mono hidden text-[11px] uppercase tracking-wider text-[var(--muted-foreground)] sm:inline">
  Signed in — <strong className="text-[var(--foreground)]">{session?.u}</strong>

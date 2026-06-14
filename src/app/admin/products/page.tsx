@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { FaArrowLeft, FaPlus, FaPen, FaTrash, FaSave } from 'react-icons/fa';
 import type { Category, Product, SiteContent } from '@/lib/content';
 import ProductEditor from '@/components/admin/ProductEditor';
+import BackgroundField from '@/components/admin/BackgroundField';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 const emptyProduct: Product = { name: '', img: '', features: [], industries: [], useCases: [] };
 
@@ -106,6 +108,12 @@ export default function ProductsAdmin() {
  <h1 className="font-heading text-2xl font-bold text-[var(--brand-ink)]">Products</h1>
  <p className="mt-1 text-[var(--muted-foreground)]">Add, edit, or remove products. Click “Save changes” when you&apos;re done.</p>
 
+ <div className="mt-6 space-y-4 border-2 border-[var(--foreground)] bg-white p-4">
+ <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Page backgrounds</p>
+ <BackgroundField content={content} mutate={mutate} bgKey="productsPage" />
+ <BackgroundField content={content} mutate={mutate} bgKey="admin" />
+ </div>
+
  <div className="mt-8 space-y-10">
  {categories.map((cat, ci) => (
  <section key={cat.id ?? ci}>
@@ -119,6 +127,21 @@ export default function ProductsAdmin() {
  >
  <FaPlus size={11} /> Add product
  </button>
+ </div>
+
+ <div className="mb-4 border border-[var(--border)] bg-white p-4">
+ <label className="mb-1 block text-sm font-semibold text-[var(--foreground)]">
+ Section background texture{' '}
+ <span className="font-normal text-[var(--muted-foreground)]">(auto-detected from category name if blank)</span>
+ </label>
+ <ImageUpload
+ value={cat.textureImg || ''}
+ aspect={16 / 9}
+ minWidth={1000}
+ onChange={(url) => mutate((c) => {
+ c.productsData.categories[ci].textureImg = url || undefined;
+ })}
+ />
  </div>
 
  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

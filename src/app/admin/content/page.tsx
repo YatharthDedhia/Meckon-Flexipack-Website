@@ -5,7 +5,7 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { useAdminContent } from '@/components/admin/useAdminContent';
 import AdminHeader from '@/components/admin/AdminHeader';
 import ImageUpload from '@/components/admin/ImageUpload';
-import { BACKGROUND_DEFAULTS, BACKGROUND_LABELS } from '@/lib/content';
+import BackgroundField from '@/components/admin/BackgroundField';
 
 const field = 'swiss-input';
 
@@ -35,7 +35,7 @@ function StringList({ label, items, onChange }: { label: string; items: string[]
  );
 }
 
-const TABS = ['Hero', 'About', 'History', 'Stats', 'Clients', 'Highlights', 'Industries', 'Use-cases', 'Backgrounds', 'Contact'] as const;
+const TABS = ['Hero', 'About', 'History', 'Stats', 'Clients', 'Highlights', 'Industries', 'Use-cases', 'Contact'] as const;
 const HIGHLIGHT_ICONS = ['leaf', 'print', 'factory', 'shield'];
 const INDUSTRY_ICONS = ['food', 'retail', 'pharma', 'agri', 'ecom', 'apparel'];
 const USECASE_ICONS = ['snacks', 'spices', 'liquids', 'grains', 'frozen', 'dryfoods', 'apparel', 'retail', 'pharma', 'ecom', 'industrial'];
@@ -97,6 +97,7 @@ export default function ContentAdmin() {
 
  {tab === 'About' && (
  <>
+ <BackgroundField content={content} mutate={mutate} bgKey="aboutCompany" />
  <Field label="Heading" value={pc.about.heading} onChange={(v) => mutate((c) => { (c.pageContent as any).about.heading = v; })} />
  <StringList label="Paragraphs" items={pc.about.paragraphs} onChange={(items) => mutate((c) => { (c.pageContent as any).about.paragraphs = items; })} />
  </>
@@ -104,6 +105,7 @@ export default function ContentAdmin() {
 
  {tab === 'History' && (
  <>
+ <BackgroundField content={content} mutate={mutate} bgKey="aboutHistory" />
  <Field label="Heading" value={pc.history.heading} onChange={(v) => mutate((c) => { (c.pageContent as any).history.heading = v; })} />
  <StringList label="Paragraphs" items={pc.history.paragraphs} onChange={(items) => mutate((c) => { (c.pageContent as any).history.paragraphs = items; })} />
  </>
@@ -124,6 +126,7 @@ export default function ContentAdmin() {
 
  {tab === 'Clients' && (
  <div className="space-y-3">
+ <BackgroundField content={content} mutate={mutate} bgKey="clients" />
  {clients.map((cl, i) => (
  <div key={i} className="flex items-end gap-3">
  <div className="flex-1"><Field label="Client name" value={cl.name} onChange={(v) => mutate((c) => { (c.clients as any)[i].name = v; })} /></div>
@@ -136,6 +139,7 @@ export default function ContentAdmin() {
 
  {tab === 'Highlights' && (
  <div className="space-y-5">
+ <BackgroundField content={content} mutate={mutate} bgKey="highlights" />
  {highlights.map((h, i) => (
  <div key={i} className=" border border-[var(--foreground)] p-4">
  <div className="mb-3 flex items-center justify-between">
@@ -160,6 +164,7 @@ export default function ContentAdmin() {
 
  {tab === 'Industries' && (
  <div className="space-y-5">
+ <BackgroundField content={content} mutate={mutate} bgKey="industries" />
  <p className="text-xs text-[var(--muted-foreground)]">
  Power the “Industries We Serve” section and the product filters. The <b>key</b> is the internal id used to tag products and in the filter URL — avoid changing it once products use it.
  </p>
@@ -212,25 +217,6 @@ export default function ContentAdmin() {
  </div>
  ))}
  <button onClick={() => mutate((c) => (c.useCases as any).push({ key: '', label: '', icon: 'snacks' }))} className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--brand-red)]"><FaPlus size={11} /> Add use-case</button>
- </div>
- )}
-
- {tab === 'Backgrounds' && (
- <div className="space-y-6">
- <p className="text-xs text-[var(--muted-foreground)]">
- Faded background images behind each section. Leave one as-is to keep the default. Per-category textures on the Products page are auto-chosen from the category name, or set explicitly in the Categories editor.
- </p>
- {Object.keys(BACKGROUND_DEFAULTS).map((key) => (
- <div key={key}>
- <label className="mb-1 block text-sm font-semibold text-[var(--foreground)]">{BACKGROUND_LABELS[key] || key}</label>
- <ImageUpload
- value={content.backgrounds?.[key] || BACKGROUND_DEFAULTS[key]}
- aspect={16 / 9}
- minWidth={1000}
- onChange={(url) => mutate((c) => { c.backgrounds = { ...(c.backgrounds || {}), [key]: url }; })}
- />
- </div>
- ))}
  </div>
  )}
 

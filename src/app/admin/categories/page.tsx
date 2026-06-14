@@ -5,6 +5,7 @@ import { FaPlus, FaPen, FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import type { Category } from '@/lib/content';
 import { useAdminContent } from '@/components/admin/useAdminContent';
 import AdminHeader from '@/components/admin/AdminHeader';
+import BackgroundField from '@/components/admin/BackgroundField';
 import CategoryEditor from '@/components/admin/CategoryEditor';
 
 const emptyCat: Category = { name: '', id: '', description: '', overview: { name: '', img: '' }, products: [], link: '' };
@@ -58,6 +59,10 @@ export default function CategoriesAdmin() {
  <button onClick={() => setEditor({ index: null, cat: structuredClone(emptyCat) })} className="btn-primary">
  <FaPlus size={12} /> Add category
  </button>
+ </div>
+
+ <div className="mb-6 border-2 border-[var(--foreground)] bg-white p-4">
+ <BackgroundField content={content} mutate={mutate} bgKey="homeCategories" />
  </div>
 
  <div className="space-y-3">
