@@ -79,6 +79,14 @@ body {
   animation: fadeIn 0.6s ease forwards;
 }
 
+@keyframes modalIn {
+  0% { opacity: 0; transform: translateY(16px) scale(0.98); }
+  100% { opacity: 1; transform: none; }
+}
+.animate-modalIn {
+  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .font-sans {
   font-family: var(--font-body), system-ui, sans-serif;
 }

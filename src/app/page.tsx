@@ -1,4 +1,6 @@
 import Categories from '@/components/Categories';
+import Industries from '@/components/Industries';
+import HowWeWork from '@/components/HowWeWork';
 import SectionHeading from '@/components/SectionHeading';
 import Reveal from '@/components/Reveal';
 import Image from 'next/image';
@@ -128,6 +130,12 @@ export default function HomePage() {
 
       {/* Products */}
       <Categories />
+
+      {/* Industries We Serve */}
+      <Industries />
+
+      {/* How We Work */}
+      <HowWeWork />
 
       {/* Clients and Partners */}
       <section className="bg-white py-20">

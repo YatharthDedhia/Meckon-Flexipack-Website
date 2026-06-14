@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, FaPaperPlane } from 'react-icons/fa';
 import { contacts } from '@/data';
@@ -21,6 +21,18 @@ export default function ContactPage() {
 
     const [status, setStatus] = useState('');
     const [sending, setSending] = useState(false);
+
+    // Prefill the enquiry when arriving from a product's "Enquire" button
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const product = params.get('product');
+        if (product) {
+            setFormData((prev) => ({
+                ...prev,
+                message: `I'm interested in ${product}. Please share details, sizes and pricing.`,
+            }));
+        }
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
