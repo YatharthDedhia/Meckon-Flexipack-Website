@@ -1,5 +1,6 @@
 type SectionHeadingProps = {
   kicker?: string;
+  num?: string;
   title: string;
   align?: 'center' | 'left';
   light?: boolean;
@@ -8,6 +9,7 @@ type SectionHeadingProps = {
 
 export default function SectionHeading({
   kicker,
+  num,
   title,
   align = 'center',
   light = false,
@@ -17,14 +19,14 @@ export default function SectionHeading({
 
   return (
     <div className={`flex flex-col ${alignment} ${className}`}>
-      {kicker && (
-        <span className={`kicker mb-6 flex items-center gap-3 ${light ? 'text-white/70' : ''}`}>
-          <span className={`h-px w-8 ${light ? 'bg-white/40' : 'bg-[var(--accent)]'}`} />
+      {(kicker || num) && (
+        <span className={`kicker mb-5 flex items-center gap-2 ${light ? 'text-white' : ''}`}>
+          {num && <span className="text-[var(--accent)]">{num}.</span>}
           {kicker}
         </span>
       )}
       <h2
-        className={`font-display text-4xl sm:text-5xl md:text-6xl ${
+        className={`font-display text-5xl sm:text-6xl md:text-7xl ${
           light ? 'text-white' : 'text-[var(--foreground)]'
         }`}
       >

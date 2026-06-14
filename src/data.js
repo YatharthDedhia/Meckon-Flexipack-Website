@@ -30,7 +30,7 @@ export const pageContent = {
     ],
     ctaText: 'Enquire Now',
     ctaLink: '/contact',
-    heroImage: '/hero1.jpg'
+    heroImage: '/hero_gpt1.png'
   },
   about: {
     heading: 'About The Company',

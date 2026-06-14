@@ -23,6 +23,7 @@ export type Category = {
   id: string;
   link?: string;
   description?: string;
+  textureImg?: string; // optional admin override for the section background texture
   overview: { name: string; img: string };
   products: Product[];
 };
@@ -40,7 +41,37 @@ export type SiteContent = {
   useCases: { key: string; label: string }[];
   processSteps: unknown[];
   productsData: { categories: Category[] };
+  backgrounds?: Record<string, string>;
 };
+
+// Named section background images, with their built-in defaults. Editable in
+// the admin under "Backgrounds"; components fall back to these defaults.
+export const BACKGROUND_DEFAULTS: Record<string, string> = {
+  aboutCompany: '/about_co.jpg',
+  aboutHistory: '/stock/team.jpg',
+  highlights: '/stock1.jpg',
+  homeCategories: '/stock2.jpg',
+  industries: '/stock/industries.jpg',
+  clients: '/stock/clients.jpg',
+  productsPage: '/products-bg.jpg',
+  admin: '/admin-bg.jpg',
+};
+
+export const BACKGROUND_LABELS: Record<string, string> = {
+  aboutCompany: 'About — company section',
+  aboutHistory: 'About — our journey section',
+  highlights: 'Home — "Packaging done right"',
+  homeCategories: 'Home — "Categories we cover"',
+  industries: 'Home — "Industries we serve"',
+  clients: 'Home — "Trusted by leading brands"',
+  productsPage: 'Products page — overall',
+  admin: 'Admin dashboard',
+};
+
+// Resolve a background image URL for a given key (admin override or default).
+export function bg(content: SiteContent, key: string): string {
+  return content.backgrounds?.[key] || BACKGROUND_DEFAULTS[key] || '';
+}
 
 function getRedis(): Redis | null {
   const url = process.env.KV_REST_API_URL;

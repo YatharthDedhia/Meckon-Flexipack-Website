@@ -8,8 +8,8 @@ import Reveal from './Reveal';
 
 function CategoryCard({ category, onClick }: { category: Category; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="group block w-full text-left">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[var(--surface)]">
+    <button onClick={onClick} className="group block w-full border-2 border-[var(--foreground)] text-left">
+      <div className="relative aspect-[4/3] overflow-hidden border-b-2 border-[var(--foreground)] bg-[var(--surface)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={category.overview.img}
@@ -21,27 +21,33 @@ function CategoryCard({ category, onClick }: { category: Category; onClick: () =
           {String(category.products.length).padStart(2, '0')} products
         </span>
       </div>
-      <div className="flex items-start justify-between gap-3 pt-5">
-        <h3 className="font-display text-2xl text-[var(--foreground)]">{category.overview.name}</h3>
+      <div className="flex items-center justify-between gap-3 bg-white p-5 transition-colors duration-150 group-hover:bg-[var(--accent)]">
+        <h3 className="font-display text-xl text-[var(--foreground)] group-hover:text-white">{category.overview.name}</h3>
         <FaArrowRight
           size={14}
-          className="mt-2 flex-shrink-0 text-[var(--accent)] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
+          className="flex-shrink-0 text-[var(--foreground)] opacity-0 -translate-x-2 transition-all duration-150 group-hover:text-white group-hover:opacity-100 group-hover:translate-x-0"
         />
       </div>
-      <div className="tile-rule mt-4" />
     </button>
   );
 }
 
-export default function Categories({ categories }: { categories: Category[] }) {
+export default function Categories({ categories, bgImage }: { categories: Category[]; bgImage: string }) {
   const router = useRouter();
   const handleClick = (id: string) => router.push(`/products#${id}`);
 
   return (
-    <section className="bg-white py-20 md:py-28">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="relative overflow-hidden bg-white py-20 md:py-28">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={bgImage}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.15] grayscale"
+      />
+      <div className="relative max-w-7xl mx-auto px-6">
         <Reveal>
-          <SectionHeading kicker="What We Make" title="Categories we cover." align="left" />
+          <SectionHeading num="03" kicker="What We Make" title="Categories we cover." align="left" />
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">

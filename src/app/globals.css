@@ -6,19 +6,19 @@
    ============================================================ */
 
 :root {
-  /* --- core tokens (light) --- */
-  --background: #FAFAF8;          /* warm near-white */
-  --foreground: #0A0A0A;          /* near-black */
-  --muted: #F0EDE7;              /* subtle surface for alternating bands */
-  --muted-foreground: #6B6B6B;   /* secondary text (AA on bg) */
-  --accent: #E20008;             /* brand red (spec's vermillion, kept on-brand) */
-  --accent-foreground: #FAFAF8;  /* text on accent */
-  --border: #E4E1DA;             /* barely-there dividers */
+  /* --- Swiss International — strict palette --- */
+  --background: #FFFFFF;          /* pure white canvas */
+  --foreground: #000000;          /* pure black */
+  --muted: #F2F2F2;              /* light gray rhythm surface */
+  --muted-foreground: #525252;   /* secondary text (AA on white) */
+  --accent: #FF3000;             /* Swiss Red — the only signal color */
+  --accent-foreground: #FFFFFF;  /* text on accent */
+  --border: #000000;             /* structure is visible — black */
   --card: #FFFFFF;
 
   /* --- back-compat aliases used throughout existing components --- */
   --brand-red: var(--accent);
-  --brand-red-dark: #B80007;
+  --brand-red-dark: #D62800;
   --brand-ink: var(--foreground);
   --ink-soft: var(--muted-foreground);
   --surface: var(--muted);
@@ -32,7 +32,7 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* Subtle noise grain over the whole page — tactile, ~4% opacity. Sits below
+/* Subtle paper noise over the whole page — tactile, ~1.5% opacity. Sits below
    navbar/modals (z-50+) and never intercepts clicks. */
 body::after {
   content: '';
@@ -40,8 +40,30 @@ body::after {
   inset: 0;
   z-index: 40;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.018;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===================== SWISS PATTERN TEXTURES ===================== */
+/* Applied to muted/white surfaces for depth without shadow. Never on black/red. */
+.swiss-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.swiss-dots {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.09) 1px, transparent 1.2px);
+  background-size: 16px 16px;
+}
+.swiss-diagonal {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.04) 0,
+    rgba(0, 0, 0, 0.04) 1px,
+    transparent 1px,
+    transparent 10px
+  );
 }
 
 /* Hero fills the viewport minus the (measured) navbar height. */
@@ -60,48 +82,51 @@ body::after {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* UI headings — Inter Tight, tightened */
+/* UI headings — Inter Tight, heavy, tight */
 h1, h2, h3, h4, .font-heading {
   font-family: var(--font-heading), system-ui, sans-serif;
-  letter-spacing: -0.04em;
-  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-weight: 800;
 }
 
-/* Poster-scale display type */
+/* Massive Swiss display type — uppercase, Black weight */
 .font-display {
   font-family: var(--font-heading), system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 0.95;
-}
-
-.text-serif {
-  font-family: var(--font-serif), Georgia, serif;
-}
-
-.text-mono {
-  font-family: var(--font-mono), 'JetBrains Mono', monospace;
-}
-
-/* Small all-caps mono kicker label (wide tracking) */
-.kicker {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+}
+
+/* Swiss has no serif/mono — these aliases now render in Inter so existing
+   markup keeps working, but reads as neutral grotesque. */
+.text-serif {
+  font-family: var(--font-heading), system-ui, sans-serif;
+}
+.text-mono {
+  font-family: var(--font-body), system-ui, sans-serif;
+  letter-spacing: 0.08em;
+}
+
+/* Small uppercase label — wide tracking, red signal */
+.kicker {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
   color: var(--accent);
 }
 
 /* ===================== BUTTONS ===================== */
 
-/* Primary = outline with full inversion on hover (the main button) */
+/* Secondary = white box, thick black border, inverts to black on hover */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border px-7 py-3 text-xs font-semibold uppercase transition-all duration-150;
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border-2 px-7 py-3 text-xs font-bold uppercase transition-colors duration-150;
   letter-spacing: 0.1em;
   border-color: var(--foreground);
   color: var(--foreground);
-  background: transparent;
+  background: var(--background);
 }
 .btn-primary:hover {
   background: var(--foreground);
@@ -111,16 +136,17 @@ h1, h2, h3, h4, .font-heading {
   transform: translateY(1px);
 }
 
-/* Solid accent fill — reserved for the single strongest CTA on a screen */
+/* Primary CTA = solid black box, snaps to Swiss Red on hover */
 .btn-solid {
-  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border px-7 py-3 text-xs font-semibold uppercase transition-all duration-150;
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border-2 px-7 py-3 text-xs font-bold uppercase transition-colors duration-150;
   letter-spacing: 0.1em;
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--foreground);
+  border-color: var(--foreground);
   color: var(--accent-foreground);
 }
 .btn-solid:hover {
-  filter: brightness(0.9);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 .btn-solid:active {
   transform: translateY(1px);
@@ -225,6 +251,23 @@ button:focus-visible {
   height: 4px;
   width: 4rem;
   background: var(--accent);
+}
+
+/* ===================== ADMIN / FORM PRIMITIVES (Swiss) ===================== */
+.swiss-card {
+  @apply border-2 border-[var(--foreground)] bg-white;
+}
+.swiss-input {
+  @apply w-full border-2 border-[var(--foreground)] bg-white px-3 py-2.5 text-sm text-[var(--foreground)] outline-none transition-colors duration-150;
+}
+.swiss-input::placeholder {
+  color: var(--muted-foreground);
+}
+.swiss-input:focus {
+  border-color: var(--accent);
+}
+.swiss-label {
+  @apply mb-2 block text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--foreground)];
 }
 
 /* ===================== MOTION ===================== */

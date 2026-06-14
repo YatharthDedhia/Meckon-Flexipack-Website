@@ -37,6 +37,22 @@ const useCaseIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   industrial: FaIndustry,
 };
 
+// Auto-detect a category's background texture from its NAME, so new categories
+// added later get a sensible material texture automatically. First match wins;
+// an explicit per-category `textureImg` (set in the admin) always overrides.
+const TEXTURE_RULES: [RegExp, string][] = [
+  [/corrugat|carton|cardboard|\bbox|crate/i, '/textures/corrugated.jpg'],
+  [/bubble|cushion|protective|fragile|wrap|flexible|film/i, '/textures/bubble.jpg'],
+  [/pouch|sachet/i, '/textures/bubble.jpg'],
+  [/paper|kraft/i, '/textures/paper.jpg'],
+  [/plastic|poly|woven|sack|\bbag|ldpe|hdpe|laminate/i, '/textures/plastic.jpg'],
+];
+function textureForCategory(name: string, override?: string): string | undefined {
+  if (override) return override;
+  for (const [re, img] of TEXTURE_RULES) if (re.test(name)) return img;
+  return undefined;
+}
+
 type UseCase = { key: string; label: string; icon: string };
 type Industry = { key: string; name: string; icon?: string };
 type Filter = { type: 'usecase' | 'industry'; key: string; label: string };
@@ -46,10 +62,12 @@ export default function ProductsClient({
   categories,
   useCases,
   industries,
+  bgImage,
 }: {
   categories: Category[];
   useCases: UseCase[];
   industries: Industry[];
+  bgImage: string;
 }) {
   const [selected, setSelected] = useState<{ product: Product; category: string } | null>(null);
   const [filter, setFilter] = useState<Filter | null>(null);
@@ -99,42 +117,46 @@ export default function ProductsClient({
         className="group block w-full text-left"
         aria-label={`View details for ${product.name}`}
       >
-        <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface)]">
-          <Image
-            src={product.img}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-          {showCategory && (
-            <span className="text-mono absolute left-4 top-4 bg-white px-3 py-1 text-[11px] uppercase tracking-wider text-[var(--foreground)]">
-              {product.category}
+        <div className="border-2 border-[var(--foreground)]">
+          <div className="relative aspect-[4/5] overflow-hidden border-b-2 border-[var(--foreground)] bg-[var(--surface)]">
+            <Image
+              src={product.img}
+              alt={product.name}
+              fill
+              className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            {showCategory && (
+              <span className="text-mono absolute left-4 top-4 bg-white px-3 py-1 text-[11px] uppercase tracking-wider text-[var(--foreground)]">
+                {product.category}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center justify-between gap-3 p-4 transition-colors duration-150 group-hover:bg-[var(--accent)]">
+            <p className="font-display text-lg text-[var(--foreground)] group-hover:text-white">{product.name}</p>
+            <span className="text-mono flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--foreground)] opacity-0 -translate-x-1 transition-all duration-150 group-hover:text-white group-hover:opacity-100 group-hover:translate-x-0">
+              View →
             </span>
-          )}
+          </div>
         </div>
-        <div className="flex items-start justify-between gap-3 pt-5">
-          <p className="font-display text-xl text-[var(--foreground)]">{product.name}</p>
-          <span className="text-mono mt-1 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--accent)] opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
-            View →
-          </span>
-        </div>
-        <div className="tile-rule mt-4" />
       </button>
     </Reveal>
   );
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
+    <section className="relative overflow-hidden">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={bgImage} alt="" aria-hidden className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.18] grayscale" />
+      <div className="relative max-w-7xl mx-auto px-4 py-16">
       <Reveal className="mb-12">
-        <SectionHeading kicker="Find Your Packaging" title="What are you packaging?" align="left" />
+        <SectionHeading num="01" kicker="Find Your Packaging" title="What are you packaging?" align="left" />
         <p className="mt-5 max-w-2xl text-base text-[var(--muted-foreground)] leading-relaxed">
           Tell us what you&apos;re packing and we&apos;ll point you to the products that fit — or browse the full range below.
         </p>
       </Reveal>
 
       <Reveal className="mb-5">
-        <div className="grid grid-cols-2 gap-px bg-[var(--border)] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-px border-2 border-[var(--foreground)] bg-[var(--border)] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {useCases.map((u) => {
             const Icon = useCaseIcons[u.icon] ?? FaBoxOpen;
             const active = filter?.type === 'usecase' && filter.key === u.key;
@@ -146,7 +168,7 @@ export default function ProductsClient({
                 className={`flex flex-col items-start gap-3 p-5 text-left transition-colors duration-150 ${
                   active
                     ? 'bg-[var(--accent)] text-white'
-                    : 'bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--muted)]'
+                    : 'bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-white'
                 }`}
               >
                 <Icon size={20} />
@@ -167,10 +189,10 @@ export default function ProductsClient({
                 key={i.key}
                 type="button"
                 onClick={() => toggleInd(i.key, i.name)}
-                className={`text-mono border px-4 py-2 text-[11px] uppercase tracking-wider transition-colors duration-150 ${
+                className={`text-mono border-2 px-4 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors duration-150 ${
                   active
                     ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
-                    : 'border-[var(--border)] bg-[var(--background)] text-[var(--muted-foreground)] hover:border-[var(--foreground)] hover:text-[var(--foreground)]'
+                    : 'border-[var(--foreground)] bg-[var(--background)] text-[var(--foreground)] hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-white'
                 }`}
               >
                 {i.name}
@@ -227,19 +249,33 @@ export default function ProductsClient({
             </div>
           </Reveal>
 
-          {categories.map(({ id, name, description, products }) => (
-            <div key={id} id={id} className="mb-24 scroll-mt-28">
-              <Reveal className="mb-10">
-                <SectionHeading kicker="Category" title={name} align="left" />
-                {description && (
-                  <p className="mt-5 max-w-2xl text-base md:text-lg leading-relaxed text-[var(--muted-foreground)]">{description}</p>
-                )}
-              </Reveal>
-              <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3">
-                {products.map((p, idx) => card({ ...p, category: name }, idx, false))}
+          {categories.map(({ id, name, description, products, textureImg }, ci) => {
+            const tex = textureForCategory(name, textureImg);
+            return (
+            <div key={id} id={id} className="relative mb-24 scroll-mt-28 py-8">
+              {tex && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={tex}
+                  alt=""
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-0 h-full w-screen max-w-none -translate-x-1/2 object-cover opacity-[0.2] grayscale"
+                />
+              )}
+              <div className="relative">
+                <Reveal className="mb-10">
+                  <SectionHeading num={String(ci + 1).padStart(2, '0')} kicker="Category" title={name} align="left" />
+                  {description && (
+                    <p className="mt-5 max-w-2xl text-base md:text-lg leading-relaxed text-[var(--muted-foreground)]">{description}</p>
+                  )}
+                </Reveal>
+                <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3">
+                  {products.map((p, idx) => card({ ...p, category: name }, idx, false))}
+                </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </>
       )}
 
@@ -258,6 +294,7 @@ export default function ProductsClient({
           </Link>
         </div>
       </Reveal>
+      </div>
 
       <ProductModal
         product={selected?.product ?? null}

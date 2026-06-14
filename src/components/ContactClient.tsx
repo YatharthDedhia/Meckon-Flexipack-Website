@@ -68,7 +68,7 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
   return (
     <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
       <Reveal className="mb-4">
-        <SectionHeading kicker="Get In Touch" title="Contact us." align="left" />
+        <SectionHeading num="01" kicker="Get In Touch" title="Contact us." align="left" />
       </Reveal>
       <Reveal delay={80} className="mb-14">
         <p className="max-w-2xl text-base md:text-lg leading-relaxed text-[var(--muted-foreground)]">
@@ -76,7 +76,7 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
         </p>
       </Reveal>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-[var(--border)] items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-px border-2 border-[var(--foreground)] bg-[var(--border)] items-stretch">
         {/* Enquiry Form — inverted panel */}
         <Reveal>
           <div className="h-full bg-[var(--foreground)] p-8 md:p-12">
@@ -128,17 +128,19 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
               {contacts.team.map(({ name, phone, email }) => {
                 const firstName = name.split(' ')[0].toLowerCase();
                 return (
-                  <div key={name} className="flex items-center gap-5 border-t border-[var(--border)] py-5">
-                    <Image
-                      src={`/team/${firstName}.jpeg`}
-                      alt={name}
-                      width={64}
-                      height={64}
-                      className="h-16 w-16 object-cover grayscale flex-shrink-0"
-                      loading="lazy"
-                    />
-                    <div className="min-w-0">
+                  <div key={name} className="flex items-center justify-between gap-5 border-t border-[var(--border)] py-5">
+                    <div className="flex min-w-0 items-center gap-5">
+                      <Image
+                        src={`/team/${firstName}.jpeg`}
+                        alt={name}
+                        width={64}
+                        height={64}
+                        className="h-16 w-16 object-cover border-2 border-[var(--foreground)] flex-shrink-0"
+                        loading="lazy"
+                      />
                       <h3 className="font-display text-xl text-[var(--foreground)]">{name}</h3>
+                    </div>
+                    <div className="text-right">
                       {phone && (
                         <a href={`tel:${phone}`} className="text-mono block text-[11px] uppercase tracking-wider text-[var(--muted-foreground)] transition-colors hover:text-[var(--accent)]">
                           {phone}
@@ -158,9 +160,9 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
             <span className="kicker mt-10 block">Visit / Reach Us</span>
             <dl className="mt-5 border-t border-[var(--border)]">
               {contacts.company.address && (
-                <div className="flex flex-col gap-1 border-b border-[var(--border)] py-4 sm:flex-row sm:gap-6">
+                <div className="flex items-baseline justify-between gap-6 border-b border-[var(--border)] py-4">
                   <dt className="text-mono w-28 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">Address</dt>
-                  <dd className="text-sm leading-relaxed text-[var(--foreground)]">
+                  <dd className="text-sm leading-relaxed text-right text-[var(--foreground)]">
                     <a href="https://maps.app.goo.gl/4cFg6ZwCo3zQYXcc9" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors">
                       {contacts.company.address}
                     </a>
@@ -168,25 +170,25 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
                 </div>
               )}
               {contacts.company.phone && (
-                <div className="flex flex-col gap-1 border-b border-[var(--border)] py-4 sm:flex-row sm:gap-6">
+                <div className="flex items-baseline justify-between gap-6 border-b border-[var(--border)] py-4">
                   <dt className="text-mono w-28 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">Phone</dt>
-                  <dd className="text-sm text-[var(--foreground)]">
+                  <dd className="text-sm text-right text-[var(--foreground)]">
                     <a href={`tel:${contacts.company.phone}`} className="hover:text-[var(--accent)] transition-colors">{contacts.company.phone}</a>
                   </dd>
                 </div>
               )}
               {contacts.company.email && (
-                <div className="flex flex-col gap-1 border-b border-[var(--border)] py-4 sm:flex-row sm:gap-6">
+                <div className="flex items-baseline justify-between gap-6 border-b border-[var(--border)] py-4">
                   <dt className="text-mono w-28 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">Email</dt>
-                  <dd className="break-all text-sm text-[var(--foreground)]">
+                  <dd className="break-all text-sm text-right text-[var(--foreground)]">
                     <a href={`mailto:${contacts.company.email}`} className="hover:text-[var(--accent)] transition-colors">{contacts.company.email}</a>
                   </dd>
                 </div>
               )}
               {contacts.company.gstin && (
-                <div className="flex flex-col gap-1 border-b border-[var(--border)] py-4 sm:flex-row sm:gap-6">
+                <div className="flex items-baseline justify-between gap-6 border-b border-[var(--border)] py-4">
                   <dt className="text-mono w-28 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">GSTIN</dt>
-                  <dd className="text-sm text-[var(--foreground)]">{contacts.company.gstin}</dd>
+                  <dd className="text-sm text-right text-[var(--foreground)]">{contacts.company.gstin}</dd>
                 </div>
               )}
             </dl>

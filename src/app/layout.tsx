@@ -3,38 +3,21 @@ import './globals.css';
 import SiteFrame from '@/components/SiteFrame';
 import { getContent } from '@/lib/content';
 import { Analytics } from "@vercel/analytics/next"
-import { Inter, Inter_Tight, Playfair_Display, JetBrains_Mono } from 'next/font/google';
+import { Inter, Inter_Tight } from 'next/font/google';
 
-// Headlines — Inter Tight (tight default spacing for poster-scale display type)
+// Swiss International — a single neutral grotesque (Inter) carries everything.
+// Inter Tight for massive display headlines, Inter for body/labels.
 const interTight = Inter_Tight({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+  weight: ['600', '700', '800', '900'],
   variable: '--font-heading',
   display: 'swap',
 });
 
-// Body
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-body',
-  display: 'swap',
-});
-
-// Mono — labels, stats, technical details, kickers
-const jetbrains = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-});
-
-// Serif — pull quotes / testimonials only
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  style: ['normal', 'italic'],
-  variable: '--font-serif',
   display: 'swap',
 });
 
@@ -60,11 +43,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     categories: content.productsData.categories.map((c) => ({ name: c.name, id: c.id, link: c.link })),
     company,
   };
+  const navCategories = content.productsData.categories.map((c) => ({
+    name: c.name,
+    id: c.id,
+    products: c.products.map((p) => ({ name: p.name })),
+  }));
 
   return (
-    <html lang="en" className={`${interTight.variable} ${inter.variable} ${jetbrains.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${interTight.variable} ${inter.variable}`}>
       <body className="font-sans" >
-        <SiteFrame footer={footer}>{children}</SiteFrame>
+        <SiteFrame footer={footer} navCategories={navCategories}>{children}</SiteFrame>
         <Analytics />
       </body>
     </html>

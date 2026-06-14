@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-export default function Navbar() {
+type NavCategory = { name: string; id: string; products: { name: string }[] };
+
+export default function Navbar({ categories = [] }: { categories?: NavCategory[] }) {
   const [open, setOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
@@ -57,7 +59,6 @@ export default function Navbar() {
     { label: 'Home', path: '/' },
     { label: 'About Us', path: '/about' },
     { label: 'Products', path: '/products' },
-    { label: 'Contact Us', path: '/contact' },
   ];
 
   const isActive = (path: string) =>
@@ -66,13 +67,11 @@ export default function Navbar() {
   return (
     <nav
       ref={navRef}
-      className={`sticky top-0 z-50 bg-[var(--background)]/85 backdrop-blur-md transition-all duration-300 ${
-        scrolled ? 'border-b border-[var(--border)]' : 'border-b border-transparent'
-      }`}
+      className="sticky top-0 z-50 bg-[var(--background)]/90 backdrop-blur-md border-b-2 border-[var(--foreground)] transition-all duration-200"
     >
       <div
         className={`max-w-7xl mx-auto flex justify-between items-center px-5 md:px-8 relative transition-all duration-300 ${
-          scrolled ? 'py-3' : 'py-5'
+          scrolled ? 'py-3' : 'py-7'
         }`}
       >
         {/* Brand lockup */}
@@ -80,11 +79,11 @@ export default function Navbar() {
           <img
             src="/logo.png"
             alt="Meckon Flexipack Logo"
-            className={`object-contain transition-all duration-300 ${scrolled ? 'w-10 h-10' : 'w-12 h-12'}`}
+            className={`object-contain transition-all duration-300 ${scrolled ? 'w-11 h-11' : 'w-16 h-16'}`}
           />
           <span className="leading-none">
-            <span className="font-display block text-xl md:text-2xl text-[var(--accent)]">Meckon</span>
-            <span className="text-mono block text-[0.6rem] md:text-[0.65rem] uppercase tracking-[0.35em] text-[var(--foreground)]">
+            <span className={`font-display block text-[var(--accent)] transition-all duration-300 ${scrolled ? 'text-xl md:text-2xl' : 'text-2xl md:text-3xl'}`}>Meckon</span>
+            <span className="text-mono block text-[0.6rem] md:text-[0.7rem] uppercase tracking-[0.35em] text-[var(--foreground)]">
               Flexipack
             </span>
           </span>
@@ -117,31 +116,71 @@ export default function Navbar() {
         </button>
 
         {/* Desktop menu */}
-        <ul className="hidden md:flex gap-8 items-center">
+        <ul className="hidden md:flex gap-9 items-center">
           {navItems.map((item) => {
             const active = isActive(item.path);
+            const isProducts = item.path === '/products';
             return (
-              <li key={item.label}>
+              <li key={item.label} className={isProducts ? 'group/prod relative' : ''}>
                 <Link
                   href={item.path}
-                  className={`text-mono group relative flex items-center py-1 text-[11px] uppercase tracking-[0.15em] transition-colors duration-150 ${
-                    active ? 'text-[var(--foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
+                  className={`group relative flex items-center py-1 text-base font-bold uppercase tracking-[0.08em] transition-colors duration-150 ${
+                    active ? 'text-[var(--accent)]' : 'text-[var(--foreground)] hover:text-[var(--accent)]'
                   }`}
                 >
                   {item.label}
+                  {isProducts && <span className="ml-1.5 text-xs">▾</span>}
                   <span
-                    className={`absolute left-0 right-0 -bottom-0.5 h-0.5 bg-[var(--accent)] transition-transform duration-150 origin-left ${
+                    className={`absolute left-0 right-0 -bottom-1 h-[3px] bg-[var(--accent)] transition-transform duration-150 origin-left ${
                       active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                     }`}
                   />
                 </Link>
+
+                {/* Products mega-dropdown */}
+                {isProducts && categories.length > 0 && (
+                  <div className="invisible absolute right-0 top-full z-50 pt-5 opacity-0 transition-opacity duration-150 group-hover/prod:visible group-hover/prod:opacity-100">
+                    <div className="w-[40rem] border-2 border-[var(--foreground)] bg-white">
+                      <div className="flex items-center justify-between border-b-2 border-[var(--foreground)] px-6 py-3">
+                        <span className="kicker">Our Products</span>
+                        <Link href="/products" className="text-mono text-[11px] font-bold uppercase tracking-wider text-[var(--foreground)] hover:text-[var(--accent)]">
+                          View all →
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-2">
+                        {categories.map((c, i) => (
+                          <div
+                            key={c.id}
+                            className={`border-[var(--foreground)] p-5 ${i % 2 === 0 ? 'border-r-2' : ''} ${i < categories.length - (categories.length % 2 === 0 ? 2 : 1) ? 'border-b-2' : ''}`}
+                          >
+                            <Link href={`/products#${c.id}`} className="font-display text-base text-[var(--foreground)] hover:text-[var(--accent)]">
+                              {c.name}
+                            </Link>
+                            <ul className="mt-2 space-y-1">
+                              {c.products.slice(0, 4).map((p) => (
+                                <li key={p.name}>
+                                  <Link href={`/products#${c.id}`} className="text-xs text-[var(--muted-foreground)] hover:text-[var(--accent)]">
+                                    {p.name}
+                                  </Link>
+                                </li>
+                              ))}
+                              {c.products.length > 4 && (
+                                <li className="text-mono text-[10px] uppercase tracking-wider text-[var(--accent)]">+{c.products.length - 4} more</li>
+                              )}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </li>
             );
           })}
           <li>
             <Link
               href="/contact"
-              className="text-mono inline-flex items-center bg-[var(--accent)] px-5 py-2.5 text-[11px] uppercase tracking-[0.15em] text-white transition-all duration-150 hover:brightness-90 active:translate-y-px"
+              className="inline-flex items-center bg-[var(--foreground)] px-6 py-3 text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-150 hover:bg-[var(--accent)] active:translate-y-px"
             >
               Enquire Now
             </Link>
@@ -180,6 +219,16 @@ export default function Navbar() {
                 </li>
               );
             })}
+            <li>
+              <Link
+                href="/contact"
+                onClick={() => toggleMenu()}
+                className="text-mono flex items-center justify-between bg-[var(--foreground)] px-5 py-4 text-xs font-bold uppercase tracking-[0.15em] text-white transition-colors duration-150 hover:bg-[var(--accent)]"
+              >
+                Enquire Now
+                <span>→</span>
+              </Link>
+            </li>
           </ul>
         </div>
       )}
