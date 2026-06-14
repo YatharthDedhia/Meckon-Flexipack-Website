@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -16,6 +17,26 @@ export default function Navbar() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Publish the navbar's (unscrolled) height as --nav-h so the hero can size
+  // itself dynamically on any device. Only capture while at the top, since the
+  // bar shrinks on scroll.
+  useEffect(() => {
+    const root = document.documentElement;
+    const update = () => {
+      const el = navRef.current;
+      if (el && window.scrollY <= 8) {
+        root.style.setProperty('--nav-h', `${el.offsetHeight}px`);
+      }
+    };
+    update();
+    const raf = window.requestAnimationFrame(update);
+    window.addEventListener('resize', update);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   const toggleMenu = () => {
@@ -44,6 +65,7 @@ export default function Navbar() {
 
   return (
     <nav
+      ref={navRef}
       className={`sticky top-0 z-50 bg-white/80 backdrop-blur-md transition-all duration-300 ${
         scrolled ? 'shadow-md border-b border-gray-100' : 'border-b border-transparent'
       }`}

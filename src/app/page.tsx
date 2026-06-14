@@ -14,7 +14,7 @@ import {
   FaIndustry,
   FaShieldAlt,
 } from 'react-icons/fa';
-import { pageContent, stats, clients, highlights } from '../data';
+import { getContent } from '@/lib/content';
 
 const statIcons = [FaAward, FaUsers, FaCheckCircle, FaBoxOpen];
 
@@ -25,11 +25,24 @@ const highlightIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   shield: FaShieldAlt,
 };
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const content = await getContent();
+  const pageContent = content.pageContent as {
+    hero: { title: string; subtitle: string; paragraphs: string[]; heroImage: string; ctaText: string; ctaLink: string };
+  };
+  const stats = content.stats as { value: string; label: string }[];
+  const clients = content.clients as { name: string }[];
+  const highlights = content.highlights as { title: string; description: string; icon: string }[];
+  const categories = content.productsData.categories;
+  const industries = content.industries;
+  const processSteps = content.processSteps as { step: number; title: string; description: string; icon: string }[];
+
   return (
     <>
       {/* Hero Section */}
-      <section className="relative min-h-screen">
+      <section className="relative hero-h">
         {/* Image for small devices */}
         <div className="block md:hidden w-full h-72 relative">
           <Image
@@ -56,10 +69,10 @@ export default function HomePage() {
         </div>
 
         {/* Content */}
-        <div className="relative flex flex-col md:flex-row md:items-center md:justify-end md:pr-0 min-h-screen max-w-7xl mx-auto px-4 py-12">
-          <div className="md:bg-white/95 md:backdrop-blur-sm text-[var(--brand-red)] rounded-2xl md:shadow-2xl max-w-2xl w-full md:w-auto px-8 py-12 md:px-14 md:py-24 text-left">
+        <div className="relative flex flex-col md:flex-row md:items-center md:justify-end hero-h w-full px-4 md:px-10 lg:px-16 py-12">
+          <div className="md:bg-white/95 md:backdrop-blur-sm text-[var(--brand-red)] rounded-2xl md:shadow-2xl max-w-2xl w-full md:w-auto px-8 py-12 md:px-14 md:py-16 text-left">
             <span className="mb-4 inline-block text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[var(--brand-red)]">
-              Meckon Flexipack
+              Plastic &amp; Paper Packaging
             </span>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight">
               {pageContent.hero.title}{' '}
@@ -92,12 +105,12 @@ export default function HomePage() {
             const Icon = statIcons[idx % statIcons.length];
             return (
               <Reveal key={stat.label} delay={idx * 100}>
-                <div className="group h-full bg-white py-12 px-4 text-center transition-colors duration-300 hover:bg-[var(--surface-tint)]">
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-tint)] text-[var(--brand-red)] transition-transform duration-300 group-hover:scale-110">
+                <div className="group h-full bg-white py-12 px-4 text-center transition-colors duration-300 hover:bg-[var(--brand-red)]">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--surface-tint)] text-[var(--brand-red)] transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
                     <Icon size={24} />
                   </div>
-                  <p className="font-heading text-4xl font-extrabold text-[var(--brand-red)]">{stat.value}</p>
-                  <p className="mt-1 text-gray-500 font-medium">{stat.label}</p>
+                  <p className="font-heading text-4xl font-extrabold text-[var(--brand-red)] transition-colors duration-300 group-hover:text-white">{stat.value}</p>
+                  <p className="mt-1 text-gray-500 font-medium transition-colors duration-300 group-hover:text-white/80">{stat.label}</p>
                 </div>
               </Reveal>
             );
@@ -129,13 +142,13 @@ export default function HomePage() {
       </section>
 
       {/* Products */}
-      <Categories />
+      <Categories categories={categories} />
 
       {/* Industries We Serve */}
-      <Industries />
+      <Industries industries={industries} />
 
       {/* How We Work */}
-      <HowWeWork />
+      <HowWeWork processSteps={processSteps} />
 
       {/* Clients and Partners */}
       <section className="bg-white py-20">

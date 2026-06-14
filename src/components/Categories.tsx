@@ -2,22 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 import { FaArrowRight } from 'react-icons/fa';
-import { productsData } from '../data';
+import type { Category } from '@/lib/content';
 import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
 
-type Category = (typeof productsData.categories)[number];
-
-function CategoryCard({
-  category,
-  onClick,
-}: {
-  category: Category;
-  onClick: () => void;
-}) {
+function CategoryCard({ category, onClick }: { category: Category; onClick: () => void }) {
   return (
     <div onClick={onClick} className="group cursor-pointer mx-auto w-full max-w-md">
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={category.overview.img}
           alt={category.overview.name}
@@ -37,14 +30,12 @@ function CategoryCard({
   );
 }
 
-export default function Categories() {
+export default function Categories({ categories }: { categories: Category[] }) {
   const router = useRouter();
+  const handleClick = (id: string) => router.push(`/products#${id}`);
 
-  const handleClick = (id: string) => {
-    router.push(`/products#${id}`);
-  };
-
-  const categories = productsData.categories;
+  const topRow = categories.slice(0, 3);
+  const restRow = categories.slice(3);
 
   return (
     <section className="bg-[var(--surface)] py-20">
@@ -53,23 +44,23 @@ export default function Categories() {
       </Reveal>
 
       <div className="max-w-7xl mx-auto px-4 mt-14">
-        {/* Top row: first 3 categories */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
-          {categories.slice(0, 3).map((category, idx) => (
+          {topRow.map((category, idx) => (
             <Reveal key={category.id} delay={idx * 100}>
               <CategoryCard category={category} onClick={() => handleClick(category.id)} />
             </Reveal>
           ))}
         </div>
 
-        {/* Bottom row: next 2 categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {categories.slice(3, 5).map((category, idx) => (
-            <Reveal key={category.id} delay={idx * 100}>
-              <CategoryCard category={category} onClick={() => handleClick(category.id)} />
-            </Reveal>
-          ))}
-        </div>
+        {restRow.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {restRow.map((category, idx) => (
+              <Reveal key={category.id} delay={idx * 100}>
+                <CategoryCard category={category} onClick={() => handleClick(category.id)} />
+              </Reveal>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

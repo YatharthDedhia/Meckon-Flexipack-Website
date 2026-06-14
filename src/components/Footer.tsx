@@ -1,11 +1,15 @@
-// Footer.tsx
 'use client';
 
 import Link from 'next/link';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
-import { quickLinks, productsData, contacts } from '../data';
 
-export default function Footer() {
+type FooterProps = {
+  quickLinks: { label: string; href: string }[];
+  categories: { name: string; id?: string; link?: string }[];
+  company: { phone?: string; email?: string; gstin?: string };
+};
+
+export default function Footer({ quickLinks, categories, company }: FooterProps) {
   return (
     <footer className="bg-[var(--brand-ink)] text-gray-300 pt-14 pb-8 border-t-4 border-[var(--brand-red)]">
       <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-10">
@@ -13,6 +17,7 @@ export default function Footer() {
         {/* Brand */}
         <div className="md:col-span-1">
           <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.png" alt="Meckon Flexipack" className="w-12 h-12 object-contain" />
             <span className="text-white font-bold leading-tight">
               <span className="block">Meckon</span>
@@ -42,10 +47,10 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Our Products</h3>
           <ul className="space-y-2 text-sm">
-            {productsData.categories.map(({ name, link }) => (
-              <li key={link}>
-                <Link href={link} className="text-gray-400 hover:text-white transition-colors">
-                  {name}
+            {categories.map((c) => (
+              <li key={c.id ?? c.name}>
+                <Link href={c.link ?? `/products#${c.id ?? ''}`} className="text-gray-400 hover:text-white transition-colors">
+                  {c.name}
                 </Link>
               </li>
             ))}
@@ -56,22 +61,28 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Contact Us</h3>
           <ul className="space-y-3 text-sm">
-            <li>
-              <a href={`tel:${contacts.company.phone}`} className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
-                <FaPhone className="text-[var(--brand-red)] flex-shrink-0" />
-                {contacts.company.phone}
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${contacts.company.email}`} className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors break-all">
-                <FaEnvelope className="text-[var(--brand-red)] flex-shrink-0" />
-                {contacts.company.email}
-              </a>
-            </li>
-            <li className="flex items-center gap-3 text-gray-400">
-              <FaMapMarkerAlt className="text-[var(--brand-red)] flex-shrink-0" />
-              {contacts.company.gstin}
-            </li>
+            {company.phone && (
+              <li>
+                <a href={`tel:${company.phone}`} className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                  <FaPhone className="text-[var(--brand-red)] flex-shrink-0" />
+                  {company.phone}
+                </a>
+              </li>
+            )}
+            {company.email && (
+              <li>
+                <a href={`mailto:${company.email}`} className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors break-all">
+                  <FaEnvelope className="text-[var(--brand-red)] flex-shrink-0" />
+                  {company.email}
+                </a>
+              </li>
+            )}
+            {company.gstin && (
+              <li className="flex items-center gap-3 text-gray-400">
+                <FaMapMarkerAlt className="text-[var(--brand-red)] flex-shrink-0" />
+                {company.gstin}
+              </li>
+            )}
           </ul>
         </div>
 

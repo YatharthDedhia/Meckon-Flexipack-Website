@@ -9,9 +9,10 @@ import {
   FaIndustry,
   FaArrowRight,
 } from 'react-icons/fa';
-import { industries } from '../data';
 import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
+
+type Industry = { key: string; name: string; description?: string; icon?: string };
 
 const industryIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   food: FaUtensils,
@@ -22,7 +23,7 @@ const industryIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   apparel: FaTshirt,
 };
 
-export default function Industries() {
+export default function Industries({ industries }: { industries: Industry[] }) {
   return (
     <section className="bg-white py-20">
       <Reveal>
@@ -30,7 +31,7 @@ export default function Industries() {
       </Reveal>
       <div className="max-w-6xl mx-auto mt-14 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {industries.map((item, idx) => {
-          const Icon = industryIcons[item.icon] ?? FaIndustry;
+          const Icon = industryIcons[item.icon ?? item.key] ?? FaIndustry;
           return (
             <Reveal key={item.name} delay={idx * 80}>
               <Link

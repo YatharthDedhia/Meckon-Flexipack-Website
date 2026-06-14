@@ -1,48 +1,56 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+import { getEmailConfig } from '@/lib/email-config';
+
+export const runtime = 'nodejs';
+
+const esc = (s) =>
+  String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 export async function POST(req) {
-    try {
-        const { name, phone, email, company, message } = await req.json();
+  try {
+    const { name, phone, email, company, message } = await req.json();
 
-        // Create transporter
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST, // e.g. "smtp.gmail.com"
-            port: process.env.SMTP_PORT, // 465 for SSL, 587 for TLS
-            secure: process.env.SMTP_SECURE === 'true', // true for port 465
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-        });
-
-        // Email content
-        const mailOptions = {
-            from: `"Website Enquiry" <${process.env.SMTP_USER}>`,
-            to: process.env.CONTACT_EMAIL,
-            subject: `New Enquiry from ${name}`,
-            html: `
-        <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
-            <h2 style="color: var(--brand-red);">New Enquiry Received</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Email:</strong> ${email ? `<a href="mailto:${email}" style="color: #1a73e8;">${email}</a>` : 'Not provided'}</p>
-            <p><strong>Company:</strong> ${company || 'Not provided'}</p>
-            <hr style="border:none; border-top:1px solid #ddd; margin: 20px 0;" />
-            <p><strong>Message:</strong></p>
-            <p style="white-space: pre-wrap; line-height: 1.5;">${message}</p>
-            <hr style="border:none; border-top:1px solid #ddd; margin: 20px 0;" />
-            <p style="font-size: 12px; color: #888;">This email was sent from your website contact form.</p>
-        </div>
-    `,
-        };
-
-
-        // Send mail
-        await transporter.sendMail(mailOptions);
-
-        return new Response(JSON.stringify({ success: true }), { status: 200 });
-    } catch (error) {
-        console.error('Email sending error:', error);
-        return new Response(JSON.stringify({ success: false, error: error.message }), { status: 500 });
+    if (!name || !message) {
+      return Response.json({ success: false, error: 'Name and message are required.' }, { status: 400 });
     }
+
+    const { resendApiKey: apiKey, contactEmail: to } = await getEmailConfig();
+    if (!apiKey || !to) {
+      console.error('Email not configured: missing Resend API key or recipient email');
+      return Response.json({ success: false, error: 'Email is not configured on the server.' }, { status: 500 });
+    }
+
+    const resend = new Resend(apiKey);
+
+    const { error } = await resend.emails.send({
+      from: 'Meckon Website <onboarding@resend.dev>',
+      to,
+      replyTo: email || undefined,
+      subject: `New enquiry from ${name}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
+          <h2 style="color: #E20008;">New enquiry received</h2>
+          <p><strong>Name:</strong> ${esc(name)}</p>
+          <p><strong>Phone:</strong> ${esc(phone) || 'Not provided'}</p>
+          <p><strong>Email:</strong> ${email ? `<a href="mailto:${esc(email)}" style="color:#1a73e8;">${esc(email)}</a>` : 'Not provided'}</p>
+          <p><strong>Company:</strong> ${esc(company) || 'Not provided'}</p>
+          <hr style="border:none; border-top:1px solid #ddd; margin: 20px 0;" />
+          <p><strong>Message:</strong></p>
+          <p style="white-space: pre-wrap; line-height: 1.5;">${esc(message)}</p>
+          <hr style="border:none; border-top:1px solid #ddd; margin: 20px 0;" />
+          <p style="font-size: 12px; color: #888;">Sent from the Meckon Flexipack website contact form.</p>
+        </div>
+      `,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return Response.json({ success: false, error: error.message || 'Failed to send email.' }, { status: 502 });
+    }
+
+    return Response.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error('Email sending error:', error);
+    return Response.json({ success: false, error: error.message }, { status: 500 });
+  }
 }

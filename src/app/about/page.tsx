@@ -1,14 +1,18 @@
-'use client';
-
-import { contacts } from '@/data';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { pageContent } from '@/data';
+import Link from 'next/link';
 import SectionHeading from '@/components/SectionHeading';
 import Reveal from '@/components/Reveal';
+import { getContent } from '@/lib/content';
 
-export default function AboutPage() {
-    const router = useRouter();
+export const dynamic = 'force-dynamic';
+
+export default async function AboutPage() {
+    const content = await getContent();
+    const pageContent = content.pageContent as {
+        about: { heading: string; paragraphs: string[] };
+        history: { heading: string; paragraphs: string[] };
+    };
+    const contacts = content.contacts as { team: { name: string }[] };
 
     return (
         <>
@@ -56,27 +60,20 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Team */}
+            {/* Team — heading left, members beside it */}
             <section className="max-w-7xl mx-auto px-4 py-20">
-                <Reveal>
-                    <SectionHeading kicker="The People" title="Meet Our Team" />
-                </Reveal>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto mt-14">
+                <div className="grid gap-10 md:grid-cols-3 md:items-center">
+                    <Reveal>
+                        <SectionHeading kicker="The People" title="Meet Our Team" align="left" />
+                    </Reveal>
                     {contacts.team.map(({ name }, idx) => {
                         const firstName = name.split(' ')[0].toLowerCase();
 
                         return (
-                            <Reveal key={name} delay={idx * 100}>
-                                <div
-                                    className="group text-center rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
-                                    onClick={() => router.push('/contact')}
-                                    role="button"
-                                    tabIndex={0}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') {
-                                            router.push('/contact');
-                                        }
-                                    }}
+                            <Reveal key={name} delay={(idx + 1) * 100}>
+                                <Link
+                                    href="/contact"
+                                    className="group block text-center rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                                 >
                                     <div className="mx-auto mb-4 h-32 w-32 overflow-hidden rounded-full ring-4 ring-[var(--surface-tint)] transition-all duration-300 group-hover:ring-[var(--brand-red)]">
                                         <Image
@@ -89,7 +86,7 @@ export default function AboutPage() {
                                         />
                                     </div>
                                     <h3 className="text-xl font-semibold text-[var(--brand-ink)] group-hover:text-[var(--brand-red)] transition-colors">{name}</h3>
-                                </div>
+                                </Link>
                             </Reveal>
                         );
                     })}

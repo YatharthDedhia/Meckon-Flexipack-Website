@@ -40,13 +40,26 @@ body {
   /* font-family: "Roboto",system-ui, sans-serif; */
 }
 
+/* Hero fills the viewport minus the (measured) navbar height — adapts to any
+   device/aspect ratio. Grows (scrolls) instead of clipping if content is taller. */
+.hero-h {
+  min-height: 100dvh;
+}
+@media (min-width: 768px) {
+  .hero-h {
+    min-height: calc(100dvh - var(--nav-h, 6rem));
+  }
+}
+
 /* ---- Reusable design utilities ---- */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 font-semibold text-white shadow-md transition-all duration-300;
+  @apply inline-flex items-center justify-center gap-2 rounded-full border-2 px-8 py-3 font-semibold text-white shadow-md transition-all duration-300;
   background: var(--brand-red);
+  border-color: var(--brand-red);
 }
 .btn-primary:hover {
-  background: var(--brand-red-dark);
+  background: #ffffff;
+  color: var(--brand-red);
   @apply shadow-lg -translate-y-0.5;
 }
 .btn-ghost {

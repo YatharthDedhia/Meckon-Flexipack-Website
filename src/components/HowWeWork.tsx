@@ -1,7 +1,8 @@
 import { FaLightbulb, FaPenNib, FaIndustry, FaClipboardCheck, FaTruck } from 'react-icons/fa';
-import { processSteps } from '../data';
 import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
+
+type Step = { step: number; title: string; description: string; icon: string };
 
 const stepIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   concept: FaLightbulb,
@@ -11,7 +12,7 @@ const stepIcons: Record<string, React.ComponentType<{ size?: number }>> = {
   delivery: FaTruck,
 };
 
-export default function HowWeWork() {
+export default function HowWeWork({ processSteps }: { processSteps: Step[] }) {
   return (
     <section className="bg-[var(--surface-tint)] py-20">
       <Reveal>

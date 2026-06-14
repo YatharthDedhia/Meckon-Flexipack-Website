@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import SiteFrame from '@/components/SiteFrame';
+import { getContent } from '@/lib/content';
 import { Analytics } from "@vercel/analytics/next"
 import { Manrope, Inter } from 'next/font/google';
 
@@ -29,13 +29,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const content = await getContent();
+  const company = (content.contacts?.company ?? {}) as {
+    phone?: string;
+    email?: string;
+    gstin?: string;
+  };
+  const footer = {
+    quickLinks: content.quickLinks as { label: string; href: string }[],
+    categories: content.productsData.categories.map((c) => ({ name: c.name, id: c.id, link: c.link })),
+    company,
+  };
+
   return (
     <html lang="en" className={`${manrope.variable} ${inter.variable}`}>
       <body className="font-sans" >
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <SiteFrame footer={footer}>{children}</SiteFrame>
         <Analytics />
       </body>
     </html>
