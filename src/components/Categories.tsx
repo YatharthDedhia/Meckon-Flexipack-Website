@@ -47,7 +47,7 @@ export default function Categories() {
   const categories = productsData.categories;
 
   return (
-    <section className="bg-[var(--surface)] py-20">
+    <section className="bg-transparent py-20">
       <Reveal>
         <SectionHeading kicker="What We Make" title="Categories we cover" />
       </Reveal>

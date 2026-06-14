@@ -13,7 +13,7 @@ const stepIcons: Record<string, React.ComponentType<{ size?: number }>> = {
 
 export default function HowWeWork() {
   return (
-    <section className="bg-[var(--surface-tint)] py-20">
+    <section className="bg-transparent py-20">
       <Reveal>
         <SectionHeading kicker="How We Work" title="From concept to doorstep" />
       </Reveal>
