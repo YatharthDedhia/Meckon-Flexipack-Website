@@ -17,24 +17,24 @@ export default async function AboutPage() {
     return (
         <>
             {/* About Company - Image left, text right */}
-            <section className="max-w-7xl mx-auto px-4 py-16 flex flex-col md:flex-row items-center md:items-start gap-12">
+            <section className="max-w-7xl mx-auto px-6 py-16 md:py-24 flex flex-col md:flex-row items-start gap-12 md:gap-16">
                 <Reveal className="flex-shrink-0">
-                    <div className="rounded-2xl bg-[var(--surface-tint)] p-8">
+                    <div className="border border-[var(--border)] bg-[var(--surface)] p-10">
                         <Image
                             src="/logo.png"
                             alt="Meckon Flexipack Logo"
-                            width={260}
-                            height={260}
+                            width={240}
+                            height={240}
                             className="object-contain"
                             priority
                         />
                     </div>
                 </Reveal>
-                <Reveal className="md:pl-4 max-w-5xl md:text-left" delay={100}>
+                <Reveal className="max-w-3xl" delay={100}>
                     <SectionHeading kicker="Who We Are" title={pageContent.about.heading} align="left" />
-                    <div className="mt-6">
+                    <div className="mt-7">
                         {pageContent.about.paragraphs.map((paragraph, index) => (
-                            <p key={index} className="text-gray-600 max-w-4xl text-lg leading-relaxed mb-4">
+                            <p key={index} className="text-[var(--muted-foreground)] text-base md:text-lg leading-relaxed mb-4">
                                 {paragraph}
                             </p>
                         ))}
@@ -43,15 +43,15 @@ export default async function AboutPage() {
             </section>
 
             {/* History */}
-            <section className="bg-[var(--surface)] py-20">
-                <div className="max-w-7xl mx-auto px-4">
+            <section className="bg-[var(--surface)] py-20 md:py-28 border-y border-[var(--border)]">
+                <div className="max-w-7xl mx-auto px-6">
                     <Reveal>
                         <SectionHeading kicker="Our Journey" title={pageContent.history.heading} align="left" />
                     </Reveal>
-                    <div className="mt-6">
+                    <div className="mt-7 max-w-3xl">
                         {pageContent.history.paragraphs.map((paragraph, index) => (
                             <Reveal key={index} delay={index * 80}>
-                                <p className="text-gray-600 max-w-4xl text-lg leading-relaxed mb-4">
+                                <p className="text-[var(--muted-foreground)] text-base md:text-lg leading-relaxed mb-4">
                                     {paragraph}
                                 </p>
                             </Reveal>
@@ -61,10 +61,12 @@ export default async function AboutPage() {
             </section>
 
             {/* Team — heading left, members beside it */}
-            <section className="max-w-7xl mx-auto px-4 py-20">
-                <div className="grid gap-10 md:grid-cols-3 md:items-center">
+            <section className="max-w-7xl mx-auto px-6 py-20 md:py-28">
+                <div className="grid gap-px bg-[var(--border)] border border-[var(--border)] md:grid-cols-3">
                     <Reveal>
-                        <SectionHeading kicker="The People" title="Meet Our Team" align="left" />
+                        <div className="h-full bg-[var(--background)] p-8 md:p-10">
+                            <SectionHeading kicker="The People" title="Meet our team." align="left" />
+                        </div>
                     </Reveal>
                     {contacts.team.map(({ name }, idx) => {
                         const firstName = name.split(' ')[0].toLowerCase();
@@ -73,19 +75,20 @@ export default async function AboutPage() {
                             <Reveal key={name} delay={(idx + 1) * 100}>
                                 <Link
                                     href="/contact"
-                                    className="group block text-center rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                                    className="group flex h-full flex-col bg-[var(--background)] p-8 md:p-10 transition-colors duration-200 hover:bg-[var(--muted)]"
                                 >
-                                    <div className="mx-auto mb-4 h-32 w-32 overflow-hidden rounded-full ring-4 ring-[var(--surface-tint)] transition-all duration-300 group-hover:ring-[var(--brand-red)]">
+                                    <div className="mb-5 h-40 w-full overflow-hidden">
                                         <Image
                                             src={`/team/${firstName}.jpeg`}
                                             alt={`${name}`}
-                                            width={200}
-                                            height={200}
-                                            className="h-full w-full object-cover"
+                                            width={300}
+                                            height={300}
+                                            className="h-full w-full object-cover grayscale transition-all duration-300 group-hover:grayscale-0"
                                             loading="lazy"
                                         />
                                     </div>
-                                    <h3 className="text-xl font-semibold text-[var(--brand-ink)] group-hover:text-[var(--brand-red)] transition-colors">{name}</h3>
+                                    <span className="text-mono text-xs text-[var(--accent)]">{String(idx + 1).padStart(2, '0')}</span>
+                                    <h3 className="mt-2 font-display text-2xl text-[var(--foreground)]">{name}</h3>
                                 </Link>
                             </Reveal>
                         );

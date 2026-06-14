@@ -1,57 +1,38 @@
 import Link from 'next/link';
-import {
-  FaUtensils,
-  FaShoppingBag,
-  FaBriefcaseMedical,
-  FaSeedling,
-  FaTruck,
-  FaTshirt,
-  FaIndustry,
-  FaArrowRight,
-} from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
 
 type Industry = { key: string; name: string; description?: string; icon?: string };
 
-const industryIcons: Record<string, React.ComponentType<{ size?: number }>> = {
-  food: FaUtensils,
-  retail: FaShoppingBag,
-  pharma: FaBriefcaseMedical,
-  agri: FaSeedling,
-  ecom: FaTruck,
-  apparel: FaTshirt,
-};
-
 export default function Industries({ industries }: { industries: Industry[] }) {
   return (
-    <section className="bg-white py-20">
-      <Reveal>
-        <SectionHeading kicker="Industries We Serve" title="Packaging for every sector" />
-      </Reveal>
-      <div className="max-w-6xl mx-auto mt-14 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {industries.map((item, idx) => {
-          const Icon = industryIcons[item.icon ?? item.key] ?? FaIndustry;
-          return (
-            <Reveal key={item.name} delay={idx * 80}>
+    <section className="bg-white py-20 md:py-28">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <SectionHeading kicker="Industries We Serve" title="Packaging for every sector." align="left" />
+        </Reveal>
+
+        <div className="mt-14 grid grid-cols-1 border-l border-t border-[var(--border)] sm:grid-cols-2 lg:grid-cols-3">
+          {industries.map((item, idx) => (
+            <Reveal key={item.name} delay={(idx % 3) * 80}>
               <Link
                 href={`/products?industry=${item.key}`}
-                className="group flex h-full items-start gap-5 rounded-2xl border border-gray-100 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--brand-red)]/30"
+                className="group flex h-full flex-col border-b border-r border-[var(--border)] p-8 transition-colors duration-200 hover:bg-[var(--muted)]"
               >
-                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--surface-tint)] text-[var(--brand-red)] transition-transform duration-300 group-hover:scale-110">
-                  <Icon size={24} />
-                </div>
-                <div>
-                  <h3 className="flex items-center gap-2 text-lg font-bold text-[var(--brand-ink)]">
-                    {item.name}
-                    <FaArrowRight className="text-sm text-[var(--brand-red)] opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-500">{item.description}</p>
-                </div>
+                <span className="text-mono text-xs text-[var(--accent)]">{String(idx + 1).padStart(2, '0')}</span>
+                <h3 className="mt-5 flex items-center gap-2 font-display text-2xl text-[var(--foreground)]">
+                  {item.name}
+                  <FaArrowRight
+                    size={13}
+                    className="text-[var(--accent)] opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0"
+                  />
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--muted-foreground)]">{item.description}</p>
               </Link>
             </Reveal>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </section>
   );

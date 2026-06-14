@@ -18,24 +18,18 @@ export default function SectionHeading({
   return (
     <div className={`flex flex-col ${alignment} ${className}`}>
       {kicker && (
-        <span
-          className={`mb-3 text-xs sm:text-sm font-bold uppercase tracking-[0.25em] ${
-            light ? 'text-white/80' : 'text-[var(--brand-red)]'
-          }`}
-        >
+        <span className={`kicker mb-6 flex items-center gap-3 ${light ? 'text-white/70' : ''}`}>
+          <span className={`h-px w-8 ${light ? 'bg-white/40' : 'bg-[var(--accent)]'}`} />
           {kicker}
         </span>
       )}
       <h2
-        className={`text-3xl md:text-4xl font-bold tracking-tight ${
-          light ? 'text-white' : 'text-[var(--brand-ink)]'
+        className={`font-display text-4xl sm:text-5xl md:text-6xl ${
+          light ? 'text-white' : 'text-[var(--foreground)]'
         }`}
       >
         {title}
       </h2>
-      <span
-        className={`mt-4 h-1 w-16 rounded-full ${light ? 'bg-white' : 'bg-[var(--brand-red)]'}`}
-      />
     </div>
   );
 }

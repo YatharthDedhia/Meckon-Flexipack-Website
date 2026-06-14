@@ -99,42 +99,42 @@ export default function ProductsClient({
         className="group block w-full text-left"
         aria-label={`View details for ${product.name}`}
       >
-        <div className="relative h-80 overflow-hidden rounded-xl shadow-md transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl">
+        <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface)]">
           <Image
             src={product.img}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
           {showCategory && (
-            <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[var(--brand-red)] backdrop-blur-sm">
+            <span className="text-mono absolute left-4 top-4 bg-white px-3 py-1 text-[11px] uppercase tracking-wider text-[var(--foreground)]">
               {product.category}
             </span>
           )}
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between gap-2 px-5 py-4">
-            <p className="text-xl font-semibold text-white">{product.name}</p>
-            <span className="flex-shrink-0 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
-              View details →
-            </span>
-          </div>
         </div>
+        <div className="flex items-start justify-between gap-3 pt-5">
+          <p className="font-display text-xl text-[var(--foreground)]">{product.name}</p>
+          <span className="text-mono mt-1 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--accent)] opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+            View →
+          </span>
+        </div>
+        <div className="tile-rule mt-4" />
       </button>
     </Reveal>
   );
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-16">
-      <Reveal className="mb-10">
-        <SectionHeading kicker="Find Your Packaging" title="What are you packaging?" />
-        <p className="mx-auto mt-4 max-w-2xl text-center text-gray-500">
+      <Reveal className="mb-12">
+        <SectionHeading kicker="Find Your Packaging" title="What are you packaging?" align="left" />
+        <p className="mt-5 max-w-2xl text-base text-[var(--muted-foreground)] leading-relaxed">
           Tell us what you&apos;re packing and we&apos;ll point you to the products that fit — or browse the full range below.
         </p>
       </Reveal>
 
-      <Reveal className="mb-6">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      <Reveal className="mb-5">
+        <div className="grid grid-cols-2 gap-px bg-[var(--border)] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {useCases.map((u) => {
             const Icon = useCaseIcons[u.icon] ?? FaBoxOpen;
             const active = filter?.type === 'usecase' && filter.key === u.key;
@@ -143,23 +143,23 @@ export default function ProductsClient({
                 key={u.key}
                 type="button"
                 onClick={() => toggleUse(u.key, u.label)}
-                className={`flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all duration-200 ${
+                className={`flex flex-col items-start gap-3 p-5 text-left transition-colors duration-150 ${
                   active
-                    ? 'border-[var(--brand-red)] bg-[var(--brand-red)] text-white shadow-md'
-                    : 'border-gray-200 bg-white text-[var(--brand-ink)] hover:-translate-y-0.5 hover:border-[var(--brand-red)] hover:shadow-md'
+                    ? 'bg-[var(--accent)] text-white'
+                    : 'bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--muted)]'
                 }`}
               >
-                <Icon size={22} />
-                <span className="text-xs font-semibold leading-tight">{u.label}</span>
+                <Icon size={20} />
+                <span className="text-mono text-[11px] uppercase tracking-wider leading-tight">{u.label}</span>
               </button>
             );
           })}
         </div>
       </Reveal>
 
-      <Reveal className="mb-14">
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="mr-1 text-sm font-semibold text-gray-400">Or shop by industry:</span>
+      <Reveal className="mb-16">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-mono mr-2 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">Or by industry —</span>
           {industries.map((i) => {
             const active = filter?.type === 'industry' && filter.key === i.key;
             return (
@@ -167,10 +167,10 @@ export default function ProductsClient({
                 key={i.key}
                 type="button"
                 onClick={() => toggleInd(i.key, i.name)}
-                className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition-all duration-200 ${
+                className={`text-mono border px-4 py-2 text-[11px] uppercase tracking-wider transition-colors duration-150 ${
                   active
-                    ? 'border-[var(--brand-red)] bg-[var(--brand-red)] text-white'
-                    : 'border-gray-200 bg-white text-gray-600 hover:border-[var(--brand-red)] hover:text-[var(--brand-red)]'
+                    ? 'border-[var(--accent)] bg-[var(--accent)] text-white'
+                    : 'border-[var(--border)] bg-[var(--background)] text-[var(--muted-foreground)] hover:border-[var(--foreground)] hover:text-[var(--foreground)]'
                 }`}
               >
                 {i.name}
@@ -181,7 +181,7 @@ export default function ProductsClient({
             <button
               type="button"
               onClick={() => setFilter(null)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-200"
+              className="text-mono inline-flex items-center gap-1.5 border border-[var(--border)] px-3 py-2 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)] transition-colors hover:border-[var(--foreground)] hover:text-[var(--foreground)]"
             >
               <FaTimes size={11} /> Clear
             </button>
@@ -191,20 +191,20 @@ export default function ProductsClient({
 
       {filter && filtered && (
         <div className="mb-16">
-          <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-[var(--brand-ink)]">
+          <div className="mb-10 flex items-center justify-between border-b border-[var(--border)] pb-5">
+            <h2 className="font-display text-2xl md:text-3xl text-[var(--foreground)]">
               {filtered.length} product{filtered.length === 1 ? '' : 's'} for{' '}
-              <span className="text-[var(--brand-red)]">{filter.label}</span>
+              <span className="text-[var(--accent)]">{filter.label}</span>
             </h2>
           </div>
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3">
               {filtered.map((p, idx) => card(p, idx, true))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-[var(--surface)] p-10 text-center">
-              <p className="text-lg font-semibold text-[var(--brand-ink)]">No exact match — but we likely make it.</p>
-              <p className="mt-2 text-gray-500">Tell us about your product and we&apos;ll recommend the right packaging.</p>
+            <div className="border border-[var(--border)] bg-[var(--muted)] p-12 text-center">
+              <p className="font-display text-2xl text-[var(--foreground)]">No exact match — but we likely make it.</p>
+              <p className="mt-3 text-[var(--muted-foreground)]">Tell us about your product and we&apos;ll recommend the right packaging.</p>
             </div>
           )}
         </div>
@@ -212,30 +212,30 @@ export default function ProductsClient({
 
       {!filter && (
         <>
-          <Reveal className="mb-10">
-            <div className="flex flex-wrap justify-center gap-3">
+          <Reveal className="mb-12">
+            <div className="flex flex-wrap gap-2 border-y border-[var(--border)] py-4">
               {categories.map(({ id, name, products }) => (
                 <a
                   key={id}
                   href={`#${id}`}
-                  className="rounded-full border border-gray-200 bg-white px-5 py-2 text-sm font-semibold text-gray-600 transition-all duration-200 hover:border-[var(--brand-red)] hover:bg-[var(--brand-red)] hover:text-white"
+                  className="text-mono border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)] transition-colors duration-150 hover:border-[var(--foreground)] hover:text-[var(--foreground)]"
                 >
                   {name}
-                  <span className="ml-2 text-xs opacity-60">{products.length}</span>
+                  <span className="ml-2 text-[var(--accent)]">{String(products.length).padStart(2, '0')}</span>
                 </a>
               ))}
             </div>
           </Reveal>
 
           {categories.map(({ id, name, description, products }) => (
-            <div key={id} id={id} className="mb-20 scroll-mt-28">
+            <div key={id} id={id} className="mb-24 scroll-mt-28">
               <Reveal className="mb-10">
                 <SectionHeading kicker="Category" title={name} align="left" />
                 {description && (
-                  <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">{description}</p>
+                  <p className="mt-5 max-w-2xl text-base md:text-lg leading-relaxed text-[var(--muted-foreground)]">{description}</p>
                 )}
               </Reveal>
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3">
                 {products.map((p, idx) => card({ ...p, category: name }, idx, false))}
               </div>
             </div>
@@ -244,15 +244,16 @@ export default function ProductsClient({
       )}
 
       <Reveal>
-        <div className="mt-4 flex flex-col items-center gap-4 rounded-2xl bg-[var(--brand-ink)] px-8 py-12 text-center md:flex-row md:justify-between md:text-left">
+        <div className="mt-4 flex flex-col items-start gap-6 bg-[var(--foreground)] px-8 py-14 md:flex-row md:items-center md:justify-between md:px-14">
           <div>
-            <h3 className="text-2xl font-bold text-white">Not sure what you need?</h3>
-            <p className="mt-2 text-gray-300">
+            <span className="kicker text-[var(--accent)]">Get in touch</span>
+            <h3 className="mt-4 font-display text-3xl md:text-4xl text-white">Not sure what you need?</h3>
+            <p className="mt-3 max-w-md text-white/60">
               Tell us about your product, quantity and branding — we&apos;ll recommend the ideal packaging.
             </p>
           </div>
-          <Link href="/contact?product=the right packaging for my product" className="btn-primary flex-shrink-0">
-            <FaPaperPlane size={14} />
+          <Link href="/contact?product=the right packaging for my product" className="btn-solid flex-shrink-0">
+            <FaPaperPlane size={13} />
             Get a recommendation
           </Link>
         </div>

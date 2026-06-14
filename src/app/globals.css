@@ -1,47 +1,50 @@
 @import "tailwindcss";
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   BOLD TYPOGRAPHY — light theme
+   Poster design translated to web. Type is the hero.
+   ============================================================ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+:root {
+  /* --- core tokens (light) --- */
+  --background: #FAFAF8;          /* warm near-white */
+  --foreground: #0A0A0A;          /* near-black */
+  --muted: #F0EDE7;              /* subtle surface for alternating bands */
+  --muted-foreground: #6B6B6B;   /* secondary text (AA on bg) */
+  --accent: #E20008;             /* brand red (spec's vermillion, kept on-brand) */
+  --accent-foreground: #FAFAF8;  /* text on accent */
+  --border: #E4E1DA;             /* barely-there dividers */
+  --card: #FFFFFF;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* --- back-compat aliases used throughout existing components --- */
+  --brand-red: var(--accent);
+  --brand-red-dark: #B80007;
+  --brand-ink: var(--foreground);
+  --ink-soft: var(--muted-foreground);
+  --surface: var(--muted);
+  --surface-tint: var(--muted);
+  --line: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-
-
-:root {
-  --brand-red: #E20008;
-  --brand-red-dark: #B80007;
-  --brand-ink: #18181b;
-  --surface: #fafafa;
-  --surface-tint: #fdf3f3;
-  --font-open-sans: 'Open Sans', sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
 }
 
-body {
-  @apply bg-white text-gray-900;
-  /* font-family: "Roboto",system-ui, sans-serif; */
+/* Subtle noise grain over the whole page — tactile, ~4% opacity. Sits below
+   navbar/modals (z-50+) and never intercepts clicks. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Hero fills the viewport minus the (measured) navbar height — adapts to any
-   device/aspect ratio. Grows (scrolls) instead of clipping if content is taller. */
+/* Hero fills the viewport minus the (measured) navbar height. */
 .hero-h {
   min-height: 100dvh;
 }
@@ -51,32 +54,185 @@ body {
   }
 }
 
-/* ---- Reusable design utilities ---- */
-.btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border-2 px-8 py-3 font-semibold text-white shadow-md transition-all duration-300;
-  background: var(--brand-red);
-  border-color: var(--brand-red);
-}
-.btn-primary:hover {
-  background: #ffffff;
-  color: var(--brand-red);
-  @apply shadow-lg -translate-y-0.5;
-}
-.btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border-2 px-8 py-3 font-semibold transition-all duration-300;
-  border-color: var(--brand-red);
-  color: var(--brand-red);
-}
-.btn-ghost:hover {
-  background: var(--brand-red);
-  @apply text-white -translate-y-0.5;
+/* ===================== TYPOGRAPHY ===================== */
+
+.font-sans {
+  font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* Scroll reveal */
+/* UI headings — Inter Tight, tightened */
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+/* Poster-scale display type */
+.font-display {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.text-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.text-mono {
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
+}
+
+/* Small all-caps mono kicker label (wide tracking) */
+.kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+
+/* ===================== BUTTONS ===================== */
+
+/* Primary = outline with full inversion on hover (the main button) */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border px-7 py-3 text-xs font-semibold uppercase transition-all duration-150;
+  letter-spacing: 0.1em;
+  border-color: var(--foreground);
+  color: var(--foreground);
+  background: transparent;
+}
+.btn-primary:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Solid accent fill — reserved for the single strongest CTA on a screen */
+.btn-solid {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border px-7 py-3 text-xs font-semibold uppercase transition-all duration-150;
+  letter-spacing: 0.1em;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-foreground);
+}
+.btn-solid:hover {
+  filter: brightness(0.9);
+}
+.btn-solid:active {
+  transform: translateY(1px);
+}
+
+/* Text button with animated underline (accent) */
+.btn-text {
+  @apply relative inline-flex items-center gap-2 whitespace-nowrap py-2 text-xs font-semibold uppercase transition-transform duration-150;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.btn-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 150ms cubic-bezier(0.25, 0, 0, 1);
+}
+.btn-text:hover::after {
+  transform: scaleX(1.1);
+}
+.btn-text:active {
+  transform: translateY(1px);
+}
+
+/* Ghost = muted text, underline grows on hover */
+.btn-ghost {
+  @apply relative inline-flex items-center gap-2 whitespace-nowrap py-2 text-xs font-semibold uppercase transition-colors duration-150;
+  letter-spacing: 0.1em;
+  color: var(--muted-foreground);
+}
+.btn-ghost::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 150ms cubic-bezier(0.25, 0, 0, 1);
+}
+.btn-ghost:hover {
+  color: var(--foreground);
+}
+.btn-ghost:hover::after {
+  transform: scaleX(1);
+}
+
+/* Arrow link */
+.link-arrow {
+  @apply inline-flex items-center gap-2 text-xs font-semibold uppercase transition-all duration-150;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.link-arrow svg {
+  transition: transform 0.15s cubic-bezier(0.25, 0, 0, 1);
+}
+.link-arrow:hover svg {
+  transform: translateX(4px);
+}
+
+/* Focus-visible: 2px accent ring, 2px offset */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===================== DECORATION ===================== */
+
+/* Hover line-draw under catalog tiles */
+.tile-rule {
+  position: relative;
+  height: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+.tile-rule::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.25, 0, 0, 1);
+}
+.group:hover .tile-rule::after {
+  transform: scaleX(1);
+}
+
+/* Short accent bar anchor */
+.accent-bar {
+  display: inline-block;
+  height: 4px;
+  width: 4rem;
+  background: var(--accent);
+}
+
+/* ===================== MOTION ===================== */
+
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.25, 0, 0, 1), transform 0.5s cubic-bezier(0.25, 0, 0, 1);
   will-change: opacity, transform;
 }
 .reveal-in {
@@ -89,7 +245,7 @@ body {
   100% { opacity: 1; }
 }
 .animate-fadeIn {
-  animation: fadeIn 0.6s ease forwards;
+  animation: fadeIn 0.5s cubic-bezier(0.25, 0, 0, 1) forwards;
 }
 
 @keyframes modalIn {
@@ -97,103 +253,39 @@ body {
   100% { opacity: 1; transform: none; }
 }
 .animate-modalIn {
-  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modalIn 0.2s cubic-bezier(0.25, 0, 0, 1) forwards;
 }
 
-.font-sans {
-  font-family: var(--font-body), system-ui, sans-serif;
-}
-
-/* Headings use the display font (Manrope) */
-h1, h2, h3, h4, .font-heading {
-  font-family: var(--font-heading), var(--font-body), system-ui, sans-serif;
-  letter-spacing: -0.01em;
-}
-
+/* ---- Navbar animations (unchanged) ---- */
 @keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeUp {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
 }
-
-.animate-slideDown {
-  animation: slideDown 0.3s ease forwards;
-}
-
-.animate-fadeUp {
-  animation: fadeUp 0.3s ease forwards;
-}
+.animate-slideDown { animation: slideDown 0.3s ease forwards; }
+.animate-fadeUp { animation: fadeUp 0.3s ease forwards; }
 
 @keyframes shrinkUp {
-  0% {
-    transform: scale(1) translateY(0);
-  }
-  100% {
-    transform: scale(1) translateY(-20px);
-  }
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1) translateY(-20px); }
 }
-
 @keyframes growDown {
-  0% {
-    transform: scale(1) translateY(-20px);
-  }
-  100% {
-    transform: scale(1) translateY(0);
-  }
+  0% { transform: scale(1) translateY(-20px); }
+  100% { transform: scale(1) translateY(0); }
 }
-
-.animate-shrinkUp {
-  animation: shrinkUp 0.3s ease forwards;
-}
-
-.animate-growDown {
-  animation: growDown 0.3s ease forwards;
-}
+.animate-shrinkUp { animation: shrinkUp 0.3s ease forwards; }
+.animate-growDown { animation: growDown 0.3s ease forwards; }
 
 @keyframes slideDownFadeIn {
-  0% {
-    max-height: 0;
-    opacity: 0;
-  }
-  100% {
-    max-height: 300px; /* or enough to contain menu */
-    opacity: 1;
-  }
+  0% { max-height: 0; opacity: 0; }
+  100% { max-height: 300px; opacity: 1; }
 }
-
 @keyframes slideUpFadeOut {
-  0% {
-    max-height: 300px;
-    opacity: 1;
-  }
-  100% {
-    max-height: 0;
-    opacity: 0;
-  }
+  0% { max-height: 300px; opacity: 1; }
+  100% { max-height: 0; opacity: 0; }
 }
-
-.animate-slideDownFadeIn {
-  animation: slideDownFadeIn 0.3s ease forwards;
-  overflow: hidden;
-}
-
-.animate-slideUpFadeOut {
-  animation: slideUpFadeOut 0.3s ease forwards;
-  overflow: hidden;
-}
+.animate-slideDownFadeIn { animation: slideDownFadeIn 0.3s ease forwards; overflow: hidden; }
+.animate-slideUpFadeOut { animation: slideUpFadeOut 0.3s ease forwards; overflow: hidden; }

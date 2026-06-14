@@ -61,12 +61,12 @@ export default function ProductModal({
       />
 
       {/* Card */}
-      <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl animate-modalIn max-h-[90vh] flex flex-col md:flex-row">
+      <div className="relative z-10 w-full max-w-3xl overflow-hidden bg-[var(--background)] shadow-2xl animate-modalIn max-h-[90vh] flex flex-col md:flex-row">
         {/* Close */}
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow transition-colors hover:bg-[var(--brand-red)] hover:text-white"
+          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center bg-white text-[var(--foreground)] transition-colors hover:bg-[var(--accent)] hover:text-white"
         >
           <FaTimes size={15} />
         </button>
@@ -83,15 +83,13 @@ export default function ProductModal({
         </div>
 
         {/* Details */}
-        <div className="flex-1 overflow-y-auto p-7 md:p-8">
+        <div className="flex-1 overflow-y-auto p-7 md:p-9">
           {category && (
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-red)]">
-              {category}
-            </span>
+            <span className="kicker">{category}</span>
           )}
-          <h3 className="mt-1 text-2xl font-bold text-[var(--brand-ink)]">{product.name}</h3>
+          <h3 className="mt-3 font-display text-3xl text-[var(--foreground)]">{product.name}</h3>
           {product.description && (
-            <p className="mt-3 leading-relaxed text-gray-600">{product.description}</p>
+            <p className="mt-3 leading-relaxed text-[var(--muted-foreground)]">{product.description}</p>
           )}
 
           {product.features && product.features.length > 0 && (
@@ -99,20 +97,20 @@ export default function ProductModal({
               {product.features.map((f) => (
                 <span
                   key={f}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[var(--surface-tint)] px-3 py-1 text-xs font-semibold text-[var(--brand-red)]"
+                  className="text-mono inline-flex items-center gap-1.5 border border-[var(--border)] px-3 py-1.5 text-[11px] uppercase tracking-wider text-[var(--foreground)]"
                 >
-                  <FaCheck size={9} /> {f}
+                  <FaCheck size={9} className="text-[var(--accent)]" /> {f}
                 </span>
               ))}
             </div>
           )}
 
           {specs.length > 0 && (
-            <dl className="mt-6 divide-y divide-gray-100 border-y border-gray-100">
+            <dl className="mt-7 border-t border-[var(--border)]">
               {specs.map((s) => (
-                <div key={s.label} className="flex gap-4 py-2.5">
-                  <dt className="w-28 flex-shrink-0 text-sm font-semibold text-gray-400">{s.label}</dt>
-                  <dd className="text-sm text-gray-700">{s.value}</dd>
+                <div key={s.label} className="flex gap-4 border-b border-[var(--border)] py-3">
+                  <dt className="text-mono w-28 flex-shrink-0 text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">{s.label}</dt>
+                  <dd className="text-sm text-[var(--foreground)]">{s.value}</dd>
                 </div>
               ))}
             </dl>
@@ -120,9 +118,9 @@ export default function ProductModal({
 
           <Link
             href={`/contact?product=${encodeURIComponent(product.name)}`}
-            className="btn-primary mt-7 w-full sm:w-auto"
+            className="btn-solid mt-8 w-full sm:w-auto"
           >
-            <FaPaperPlane size={14} />
+            <FaPaperPlane size={13} />
             Enquire about this product
           </Link>
         </div>
