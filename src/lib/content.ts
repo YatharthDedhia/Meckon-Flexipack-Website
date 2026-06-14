@@ -74,4 +74,50 @@ export async function saveContent(data: SiteContent): Promise<void> {
   const redis = getRedis();
   if (!redis) throw new Error('Content store (Redis) is not configured');
   await redis.set(CONTENT_KEY, data);
+  await recordVersion(redis, data);
+}
+
+// ---- Version history (for rollback) --------------------------------------
+
+const HISTORY_KEY = 'site-content-history';
+const MAX_HISTORY = 30; // keep the last 30 saved versions
+
+export type Version = { id: string; savedAt: number; content: SiteContent };
+
+// Append a snapshot of the just-saved content to the history list (newest
+// first), capped at MAX_HISTORY. Best-effort: never blocks/breaks a save.
+async function recordVersion(redis: Redis, content: SiteContent): Promise<void> {
+  const version: Version = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    savedAt: Date.now(),
+    content,
+  };
+  try {
+    await redis.lpush(HISTORY_KEY, version);
+    await redis.ltrim(HISTORY_KEY, 0, MAX_HISTORY - 1);
+  } catch {
+    /* history is non-critical */
+  }
+}
+
+// All saved versions, newest first.
+export async function getVersions(): Promise<Version[]> {
+  const redis = getRedis();
+  if (!redis) return [];
+  try {
+    const raw = await redis.lrange<Version>(HISTORY_KEY, 0, -1);
+    return raw || [];
+  } catch {
+    return [];
+  }
+}
+
+// Roll back to a previous version. Saving it also appends it as the newest
+// version, so a restore is itself reversible.
+export async function restoreVersion(id: string): Promise<SiteContent | null> {
+  const versions = await getVersions();
+  const v = versions.find((x) => x.id === id);
+  if (!v) return null;
+  await saveContent(v.content);
+  return v.content;
 }

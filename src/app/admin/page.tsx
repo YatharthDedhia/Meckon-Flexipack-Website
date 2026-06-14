@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
-import { FaBox, FaThLarge, FaFileAlt, FaEnvelope } from 'react-icons/fa';
+import { FaBox, FaThLarge, FaFileAlt, FaEnvelope, FaHistory } from 'react-icons/fa';
 import { SESSION_COOKIE, verifySessionToken } from '@/lib/session';
 import LogoutButton from '@/components/admin/LogoutButton';
 
@@ -9,6 +9,7 @@ const cards = [
   { href: '/admin/categories', title: 'Categories', desc: 'Manage product categories', icon: FaThLarge },
   { href: '/admin/content', title: 'Site Content', desc: 'Hero, about, history, stats, clients, contact', icon: FaFileAlt },
   { href: '/admin/email', title: 'Email Settings', desc: 'Where contact-form enquiries are sent', icon: FaEnvelope },
+  { href: '/admin/history', title: 'Version History', desc: 'View past versions and roll back changes', icon: FaHistory },
 ];
 
 export default async function AdminDashboard() {
