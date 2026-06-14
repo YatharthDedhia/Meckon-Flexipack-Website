@@ -24,7 +24,7 @@ const industryIcons: Record<string, React.ComponentType<{ size?: number }>> = {
 
 export default function Industries() {
   return (
-    <section className="bg-transparent py-20">
+    <section className="bg-white py-20">
       <Reveal>
         <SectionHeading kicker="Industries We Serve" title="Packaging for every sector" />
       </Reveal>

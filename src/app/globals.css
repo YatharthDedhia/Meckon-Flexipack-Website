@@ -87,50 +87,6 @@ body {
   animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ---- Animated site background (lightweight: static gradient + 1 moving dot layer) ----
-   Gradient is painted once (free). A single ~viewport-sized dot layer translates on
-   the compositor thread — no JS, no per-frame repaint, tiny GPU texture. Cheap on
-   low-powered devices. */
-.ag-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -10;
-  overflow: hidden;
-  pointer-events: none;
-  background-color: #fbfaf8;
-  background-image:
-    radial-gradient(34rem 34rem at 15% 12%, rgba(226, 0, 8, 0.10), transparent 60%),
-    radial-gradient(38rem 38rem at 85% 28%, rgba(226, 0, 8, 0.08), transparent 62%),
-    radial-gradient(42rem 42rem at 55% 96%, rgba(255, 99, 99, 0.08), transparent 60%);
-}
-
-/* Particle canvas — fills the fixed background layer, sits above the glow. */
-.ag-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* Frosted veil over the background — lifts contrast for content legibility. */
-.ag-veil {
-  position: absolute;
-  inset: 0;
-  background: rgba(250, 249, 246, 0.32);
-}
-
-
-/* Persistent soft glow — stays put (does not track the cursor). */
-.ag-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 44rem;
-  height: 44rem;
-  background: radial-gradient(circle, rgba(226, 0, 8, 0.12), rgba(226, 0, 8, 0.05) 38%, transparent 66%);
-  transform: translate3d(calc(50vw - 22rem), calc(42vh - 22rem), 0);
-}
-
-
 .font-sans {
   font-family: var(--font-body), system-ui, sans-serif;
 }

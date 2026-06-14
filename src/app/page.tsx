@@ -29,7 +29,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative min-h-screen overflow-hidden">
+      <section className="relative min-h-screen">
         {/* Image for small devices */}
         <div className="block md:hidden w-full h-72 relative">
           <Image
@@ -42,8 +42,8 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
 
-        {/* Background image for md+ (contained to the hero) */}
-        <div className="hidden md:block absolute inset-0 z-0">
+        {/* Fixed background image for md+ */}
+        <div className="hidden md:block fixed inset-0 -z-10">
           <Image
             src={pageContent.hero.heroImage}
             alt="Packaging products showcase"
@@ -56,7 +56,7 @@ export default function HomePage() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-end md:pr-0 min-h-screen max-w-7xl mx-auto px-4 py-12">
+        <div className="relative flex flex-col md:flex-row md:items-center md:justify-end md:pr-0 min-h-screen max-w-7xl mx-auto px-4 py-12">
           <div className="md:bg-white/95 md:backdrop-blur-sm text-[var(--brand-red)] rounded-2xl md:shadow-2xl max-w-2xl w-full md:w-auto px-8 py-12 md:px-14 md:py-24 text-left">
             <span className="mb-4 inline-block text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[var(--brand-red)]">
               Meckon Flexipack
@@ -83,7 +83,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-transparent py-20">
+      <section className="bg-white py-20">
         <Reveal>
           <SectionHeading kicker="Our Experience" title="Trusted by the numbers" />
         </Reveal>
@@ -106,7 +106,7 @@ export default function HomePage() {
       </section>
 
       {/* Why Meckon — capability highlights */}
-      <section className="bg-transparent py-20">
+      <section className="bg-[var(--surface-tint)] py-20">
         <Reveal>
           <SectionHeading kicker="Why Meckon" title="Packaging done right" />
         </Reveal>
@@ -138,7 +138,7 @@ export default function HomePage() {
       <HowWeWork />
 
       {/* Clients and Partners */}
-      <section className="bg-transparent py-20">
+      <section className="bg-white py-20">
         <Reveal>
           <SectionHeading kicker="In Good Company" title="Our Partners & Clients" />
         </Reveal>

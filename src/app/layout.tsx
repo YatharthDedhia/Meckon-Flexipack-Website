@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import { Analytics } from "@vercel/analytics/next"
 import { Manrope, Inter } from 'next/font/google';
 
@@ -34,7 +33,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${manrope.variable} ${inter.variable}`}>
       <body className="font-sans" >
-        <AnimatedBackground />
         <Navbar />
         <main>{children}</main>
         <Footer />

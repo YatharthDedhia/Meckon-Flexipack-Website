@@ -12,7 +12,6 @@ export default function AboutPage() {
 
     return (
         <>
-        <div>
             {/* About Company - Image left, text right */}
             <section className="max-w-7xl mx-auto px-4 py-16 flex flex-col md:flex-row items-center md:items-start gap-12">
                 <Reveal className="flex-shrink-0">
@@ -40,7 +39,7 @@ export default function AboutPage() {
             </section>
 
             {/* History */}
-            <section className="bg-transparent py-20">
+            <section className="bg-[var(--surface)] py-20">
                 <div className="max-w-7xl mx-auto px-4">
                     <Reveal>
                         <SectionHeading kicker="Our Journey" title={pageContent.history.heading} align="left" />
@@ -96,7 +95,6 @@ export default function AboutPage() {
                     })}
                 </div>
             </section>
-        </div>
         </>
     );
 }
