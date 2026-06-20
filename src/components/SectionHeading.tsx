@@ -5,6 +5,8 @@ type SectionHeadingProps = {
   align?: 'center' | 'left';
   light?: boolean;
   className?: string;
+  /** Heading level for the title. Defaults to h2; use h1 for a page's lead heading. */
+  as?: 'h1' | 'h2';
 };
 
 export default function SectionHeading({
@@ -14,6 +16,7 @@ export default function SectionHeading({
   align = 'center',
   light = false,
   className = '',
+  as: Heading = 'h2',
 }: SectionHeadingProps) {
   const alignment = align === 'center' ? 'items-center text-center' : 'items-start text-left';
 
@@ -25,13 +28,13 @@ export default function SectionHeading({
           {kicker}
         </span>
       )}
-      <h2
+      <Heading
         className={`font-display text-5xl sm:text-6xl md:text-7xl ${
           light ? 'text-white' : 'text-[var(--foreground)]'
         }`}
       >
         {title}
-      </h2>
+      </Heading>
     </div>
   );
 }

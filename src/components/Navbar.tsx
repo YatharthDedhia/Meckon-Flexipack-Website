@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -76,9 +77,12 @@ export default function Navbar({ categories = [] }: { categories?: NavCategory[]
       >
         {/* Brand lockup */}
         <Link href="/" className="flex items-center gap-3 group">
-          <img
+          <Image
             src="/logo.png"
             alt="Meckon Flexipack Logo"
+            width={64}
+            height={64}
+            priority
             className={`object-contain transition-all duration-300 ${scrolled ? 'w-11 h-11' : 'w-16 h-16'}`}
           />
           <span className="leading-none">

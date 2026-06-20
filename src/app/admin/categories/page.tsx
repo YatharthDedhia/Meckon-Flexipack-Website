@@ -23,6 +23,16 @@ export default function CategoriesAdmin() {
  const onEditorSave = (cat: Category) => {
  if (!editor) return;
  mutate((c) => {
+ // Ensure the slug/id is unique among the OTHER categories (the id is used as
+ // the anchor link, React key, and product-filter join key — collisions
+ // silently merge categories). Append -2, -3, … on conflict.
+ const taken = new Set(
+ c.productsData.categories.filter((_, idx) => idx !== editor.index).map((x) => x.id)
+ );
+ const base = cat.id || 'category';
+ let id = base;
+ for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+ cat.id = id;
  cat.link = `/products#${cat.id}`;
  cat.overview.name = cat.name;
  if (editor.index === null) c.productsData.categories.push(cat);

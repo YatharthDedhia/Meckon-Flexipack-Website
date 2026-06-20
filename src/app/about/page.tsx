@@ -3,8 +3,14 @@ import Link from 'next/link';
 import SectionHeading from '@/components/SectionHeading';
 import Reveal from '@/components/Reveal';
 import { getContent, bg } from '@/lib/content';
+import type { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const metadata: Metadata = {
+  title: 'About Us',
+  description:
+    'Learn about Meckon Flexipack — a Mumbai-based manufacturer of plastic and paper packaging, our story, and the team behind our products.',
+  alternates: { canonical: '/about' },
+};
 
 export default async function AboutPage() {
     const content = await getContent();

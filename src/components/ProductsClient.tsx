@@ -149,7 +149,7 @@ export default function ProductsClient({
       <img src={bgImage} alt="" aria-hidden className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.18] grayscale" />
       <div className="relative max-w-7xl mx-auto px-4 py-16">
       <Reveal className="mb-12">
-        <SectionHeading num="01" kicker="Find Your Packaging" title="What are you packaging?" align="left" />
+        <SectionHeading as="h1" num="01" kicker="Find Your Packaging" title="What are you packaging?" align="left" />
         <p className="mt-5 max-w-2xl text-base text-[var(--muted-foreground)] leading-relaxed">
           Tell us what you&apos;re packing and we&apos;ll point you to the products that fit — or browse the full range below.
         </p>

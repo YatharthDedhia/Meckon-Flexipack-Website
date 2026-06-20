@@ -33,13 +33,19 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.phone.trim() || !formData.message.trim()) {
       setStatus('Please fill in all required fields: Name, Phone, and Enquiry.');
+      return;
+    }
+    const email = formData.email.trim();
+    if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setStatus('Please enter a valid email address, or leave it blank.');
       return;
     }
     setSending(true);
@@ -68,7 +74,7 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
   return (
     <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
       <Reveal className="mb-4">
-        <SectionHeading num="01" kicker="Get In Touch" title="Contact us." align="left" />
+        <SectionHeading as="h1" num="01" kicker="Get In Touch" title="Contact us." align="left" />
       </Reveal>
       <Reveal delay={80} className="mb-14">
         <p className="max-w-2xl text-base md:text-lg leading-relaxed text-[var(--muted-foreground)]">
@@ -112,9 +118,13 @@ export default function ContactClient({ contacts }: { contacts: Contacts }) {
                 <FaPaperPlane size={13} />
                 {sending ? 'Sending…' : 'Send Enquiry'}
               </button>
-              {status && (
-                <p className="text-mono border border-white/20 px-4 py-3 text-[11px] uppercase tracking-wider text-white/80">{status}</p>
-              )}
+              <p
+                role="status"
+                aria-live="polite"
+                className={`text-mono border border-white/20 px-4 py-3 text-[11px] uppercase tracking-wider text-white/80 ${status ? '' : 'sr-only'}`}
+              >
+                {status}
+              </p>
             </form>
           </div>
         </Reveal>

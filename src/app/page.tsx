@@ -7,8 +7,6 @@ import Reveal from '@/components/Reveal';
 import Image from 'next/image';
 import { getContent, bg } from '@/lib/content';
 
-export const dynamic = 'force-dynamic';
-
 export default async function HomePage() {
   const content = await getContent();
   const pageContent = content.pageContent as {
@@ -31,6 +29,7 @@ export default async function HomePage() {
             src={pageContent.hero.heroImage}
             alt="Packaging products showcase"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />
@@ -43,8 +42,8 @@ export default async function HomePage() {
             src={pageContent.hero.heroImage}
             alt="Packaging products showcase"
             fill
+            sizes="100vw"
             className="object-cover"
-            priority
           />
         </div>
 
@@ -61,7 +60,7 @@ export default async function HomePage() {
             {pageContent.hero.paragraphs.map((text, idx) => (
               <p
                 key={idx}
-                className={`mt-${idx === 0 ? '7' : '3'} text-base md:text-lg text-[var(--muted-foreground)] leading-relaxed max-w-md`}
+                className={`${idx === 0 ? 'mt-7' : 'mt-3'} text-base md:text-lg text-[var(--muted-foreground)] leading-relaxed max-w-md`}
               >
                 {text}
               </p>

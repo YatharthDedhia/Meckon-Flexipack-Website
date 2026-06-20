@@ -1,7 +1,13 @@
 import { getContent, bg } from '@/lib/content';
 import ProductsClient from '@/components/ProductsClient';
+import type { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const metadata: Metadata = {
+  title: 'Products',
+  description:
+    'Explore Meckon Flexipack’s range of plastic and paper packaging — flexible packaging, bags, pouches and more, filterable by industry and use case.',
+  alternates: { canonical: '/products' },
+};
 
 export default async function ProductsPage() {
   const content = await getContent();

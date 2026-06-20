@@ -65,8 +65,14 @@ export default function ProductsAdmin() {
  if (!editor) return;
  mutate((c) => {
  const cats = c.productsData.categories;
- // remove from original position if editing
  if (editor.prodIndex !== null) {
+ // Editing an existing product. If the category is unchanged, replace it in
+ // place so the product keeps its position (splice+push would move it to the
+ // end). Only when moved to a different category do we remove + append.
+ if (newCatIndex === editor.catIndex) {
+ cats[newCatIndex].products[editor.prodIndex] = product;
+ return;
+ }
  cats[editor.catIndex].products.splice(editor.prodIndex, 1);
  }
  cats[newCatIndex].products.push(product);
@@ -122,7 +128,7 @@ export default function ProductsAdmin() {
  {cat.name} <span className="text-sm font-normal text-[var(--muted-foreground)]">({cat.products.length})</span>
  </h2>
  <button
- onClick={() => setEditor({ catIndex: ci, prodIndex: null, product: { ...emptyProduct } })}
+ onClick={() => setEditor({ catIndex: ci, prodIndex: null, product: structuredClone(emptyProduct) })}
  className="inline-flex items-center gap-2 border border-[var(--foreground)] px-4 py-1.5 text-sm font-semibold text-[var(--foreground)] hover:border-[var(--brand-red)] hover:text-[var(--brand-red)]"
  >
  <FaPlus size={11} /> Add product
@@ -155,7 +161,7 @@ export default function ProductsAdmin() {
  </div>
  <div className="flex flex-shrink-0 gap-1">
  <button
- onClick={() => setEditor({ catIndex: ci, prodIndex: pi, product: p })}
+ onClick={() => setEditor({ catIndex: ci, prodIndex: pi, product: structuredClone(p) })}
  className="flex h-8 w-8 items-center justify-center text-[var(--muted-foreground)] hover:bg-[var(--muted)] hover:text-[var(--brand-red)]"
  title="Edit"
  >

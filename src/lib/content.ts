@@ -1,5 +1,5 @@
 import { Redis } from '@upstash/redis';
-import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import { defaultContent } from './default-content';
 
 const CONTENT_KEY = 'site-content';
@@ -94,12 +94,17 @@ async function readContent(): Promise<SiteContent> {
   return defaultContent;
 }
 
-// Fresh read — for the admin (always latest).
+// Fresh read — for the admin (always latest, never cached).
 export const getContentFresh = readContent;
 
-// Public read — per-request memoized (one Redis read per request, shared by the
-// layout + page). Redis is strongly consistent, so edits are immediately live.
-export const getContent = cache(readContent);
+// Public read — cached across requests and tagged with CONTENT_TAG, so the
+// public pages can be statically rendered / ISR-served instead of hitting Redis
+// on every request. Admin saves call revalidateTag(CONTENT_TAG), which busts
+// this cache so edits go live immediately.
+export const getContent = unstable_cache(readContent, ['site-content'], {
+  tags: [CONTENT_TAG],
+  revalidate: 3600, // hourly fallback in case a tag-bust is ever missed
+});
 
 export async function saveContent(data: SiteContent): Promise<void> {
   const redis = getRedis();
