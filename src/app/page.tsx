@@ -2,7 +2,7 @@ import Categories from '@/components/Categories';
 import Industries from '@/components/Industries';
 import HowWeWork from '@/components/HowWeWork';
 import SectionHeading from '@/components/SectionHeading';
-import ClientLogo from '@/components/ClientLogo';
+// import ClientLogo from '@/components/ClientLogo'; // disabled in favour of uploaded logos
 import Reveal from '@/components/Reveal';
 import Image from 'next/image';
 import { getContent, bg } from '@/lib/content';
@@ -13,7 +13,7 @@ export default async function HomePage() {
     hero: { title: string; subtitle: string; paragraphs: string[]; heroImage: string; ctaText: string; ctaLink: string };
   };
   const stats = content.stats as { value: string; label: string }[];
-  const clients = content.clients as { name: string }[];
+  const clients = content.clients as { name: string; logo: string }[];
   const highlights = content.highlights as { title: string; description: string; icon: string }[];
   const categories = content.productsData.categories;
   const industries = content.industries;
@@ -139,9 +139,22 @@ export default async function HomePage() {
             <SectionHeading num="06" kicker="In Good Company" title="Trusted by leading brands." align="left" />
           </Reveal>
           <div className="mt-12 grid grid-cols-2 border-l-2 border-t-2 border-[var(--foreground)] sm:grid-cols-3 md:grid-cols-5">
-            {clients.map(({ name }, idx) => (
-              <Reveal key={name} delay={idx * 40}>
+            {clients.map(({ name, logo }, idx) => (
+              <Reveal key={`${name}-${idx}`} delay={idx * 40}>
+                {/* Text wordmark — disabled in favour of uploaded logo
                 <ClientLogo name={name} index={idx} />
+                */}
+                <div
+                  className="group relative flex h-24 items-center justify-center border-b-2 border-r-2 border-[var(--foreground)] px-6"
+                  title={name}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={logo} alt={name} className="max-h-12 max-w-full object-contain transition-opacity duration-150 group-hover:opacity-0" />
+                  {/* Client name — revealed on hover */}
+                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[var(--accent)] px-4 text-center font-display text-base text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+                    {name}
+                  </span>
+                </div>
               </Reveal>
             ))}
           </div>

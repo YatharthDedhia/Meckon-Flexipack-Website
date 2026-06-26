@@ -129,7 +129,13 @@ export default function ContentAdmin() {
  <BackgroundField content={content} mutate={mutate} bgKey="clients" />
  {clients.map((cl, i) => (
  <div key={i} className="flex items-end gap-3">
- <div className="flex-1"><Field label="Client name" value={cl.name} onChange={(v) => mutate((c) => { (c.clients as any)[i].name = v; })} /></div>
+ <div className="flex-1 space-y-3">
+ <Field label="Client name (shown on hover)" value={cl.name} onChange={(v) => mutate((c) => { (c.clients as any)[i].name = v; })} />
+ <div>
+ <span className="mb-1 block text-sm font-semibold text-[var(--foreground)]">Client logo</span>
+ <ImageUpload value={cl.logo} onChange={(url) => mutate((c) => { (c.clients as any)[i].logo = url; })} aspect={3 / 2} minWidth={400} size="h-16 w-24" />
+ </div>
+ </div>
  <button onClick={() => mutate((c) => (c.clients as any).splice(i, 1))} className="pb-2 text-[var(--muted-foreground)] hover:text-[var(--brand-red)]"><FaTrash size={13} /></button>
  </div>
  ))}
